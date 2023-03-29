@@ -1,37 +1,50 @@
-/*Para que no salgan las flechas en los cuadros de los numeros*/
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
--webkit-appearance: none; 
-}
-
-input[type=number] {
-    -moz-appearance:textfield; 
-    margin: 0; 
-    width: 34px;
-    height: 34px;
-    background-color: black;
-    color: white;
-    
-    font-size: 20px;
-    font-weight: bold;
-    justify-content: center;
-    align-items: center;
-}
-
 body{
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
 }
 
-/*Cuadros de los numeros*/
+h1{
+    background: linear-gradient(to right, rgb(32, 78, 206), rgb(169, 121, 236));
+    font-size: 36px;
+    animation: grow 2s ease-in-out infinite alternate;
+    border: 2px solid black;
+}
+@keyframes grow {
+    0% {
+        font-size: 36px;
+    }
+    100% {
+        font-size: 48px;
+    }
+}
+
+/*Para que no salgan las flechas en los cuadros de los numeros*/
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+-webkit-appearance: none; 
+}
+/*Edita ciertos valores de los input para que esten correctamente en los cuadros*/
+input[type=number] {
+    margin: 0; 
+    width: 34px;
+    height: 34px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    border-color: black;
+}
+
+/*Cuadros de los numeros
 td {
     border: 2px solid black;
     border-collapse: collapse;
     text-align: center;
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
 }
-
+*/
 /*Para los input de cada cuadro
 #numero{
     font-size: 20px;
@@ -42,78 +55,58 @@ td {
 }
 */
 
-#boardTopLeft{
-
-    width: 450px;
-    height: 450px;
-
+.Sudoku{
+    width: 418px;
+    height: 435px;
     display: flex;
     flex-wrap: wrap;
-
     position: absolute;
-    top: 50%;
-    left: 25%;
-    transform: translate(-50%, -50%); /*ajusta la posición del div*/
-    
-    margin: 0 auto; /* centra horizontalmente el div */
-
-    background-color:white;
-}
-
-#boardTopRight{
-    width: 450px;
-    height: 450px;
-
-    position: absolute;
-    top: 50%;
-    left: 75%;
-    transform: translate(-50%, -50%); /*ajusta la posición del div*/
-    
-    margin: 0 auto; /* centra horizontalmente el div */
-
-    background-color: green;
-}
-
-
-#boardCenter{
-    width: 450px; 
-    height: 450px;
-
-    position: absolute;
-    top: 75%;
-    left: 50%;
-    transform: translate(-50%, -50%); /*ajusta la posición del div*/
-    
-    margin: 0 auto; /* centra horizontalmente el div */
-
     background-color: aqua;
 }
 
+#boardTopLeft{
+    top: 44%;
+    left: 35.1%;
+    transform: translate(-50%, -50%); /*ajusta la posición del div*/
+}
+
+#boardTopRight{
+    top: 44%;
+    left: 64.9%;
+    transform: translate(-50%, -50%); /*ajusta la posición del div*/
+}
+
+#boardCenter{
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%); /*ajusta la posición del div*/
+}
 
 #boardBottLeft{
-    width: 450px;
-    height: 450px;
-
-    position: absolute;
-    top: 100%;
-    left: 25%;
+    top: 106.1%;
+    left: 35.1%;
     transform: translate(-50%, -50%); /*ajusta la posición del div*/
-    
-    margin: 0 auto; /* centra horizontalmente el div */
-
-    background-color: yellow;
 }
 
 #boardBottRight{
-    width: 450px;
-    height: 450px;
-
     position: absolute;
-    top: 100%;
-    left: 75%;
+    top: 106%;
+    left: 64.8%;
     transform: translate(-50%, -50%); /*ajusta la posición del div*/
-    
-    margin: 0 auto; /* centra horizontalmente el div */
+}
 
-    background-color: red;
+#botones{
+    width: 100vw;
+    height: 85px;
+    background-color: lightblue;
+    position: absolute;
+    bottom: -40%;
+}
+
+.boton{
+    background-color: rgb(113, 223, 154);
+    border-color: aquamarine;
+    width: 150px;
+    height: 60px;
+    font-size: 20px;
 }
