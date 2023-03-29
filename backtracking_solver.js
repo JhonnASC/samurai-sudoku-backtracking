@@ -42,8 +42,6 @@ function revisar_eje_x(board, revisar_y, revisar_x) {
 
 
 
-
-
 function solver(board) {
     for (let x = 0; x < 9; x++) {
         for(let y = 0; y<9; y++){
@@ -52,6 +50,17 @@ function solver(board) {
     }
 }
 
-console.log(board[0][2])
-console.log(revisar_eje_y(board,0,2))
-console.log(revisar_eje_x(board,0,2))
+//console.log(board[0][2])
+//console.log(revisar_eje_y(board,0,2))
+//console.log(revisar_eje_x(board,0,2))
+
+
+revisar_y = 4
+revisar_x = 5
+const startX = Math.floor(revisar_x / 3) * 3;
+
+console.log(Math.floor(revisar_x/ 3))
+console.log()
+const startY = Math.floor(revisar_y / 3) * 3;
+console.log("X:" + startX)
+console.log("Y:" + startY)
