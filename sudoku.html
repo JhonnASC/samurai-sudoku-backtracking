@@ -14,20 +14,23 @@
 
     <body>
         <h1> Sudoku Samurai </h1>
-                <hr> 
 
-        <div id="boardTopLeft"></div>
+        <div class="Sudoku" id="boardTopLeft"></div>       
+        <div class="Sudoku" id="boardTopRight"></div>
+        <div class="Sudoku" id="boardBottLeft"></div>       
+        <div class="Sudoku" id="boardBottRight"></div>
+        <div class="Sudoku" id="boardCenter"></div>
+
+        <div id="botones">
+            <button class="boton" id="solucionar" onclick="nada()">Solucionar sudoku</button>
+            <button class="boton" id="generar" onclick="generarTableros()">Generar tablero</button>
+            <button class="boton" id="resolvA" onclick="nada()">Resolución por A**</button>
+            <button class="boton" id="resolvBack" onclick="nada()">Resolución por Backtracking</button>
+            <button class="boton" id="limpiar" onclick="limpiarSudoku()">Limpiar sudoku</button>
+            <button class="boton" id="prueba" onclick="prueba()">Prueba de cuadros</button>
+        </div>
+
         
-        <div id="boardTopRight"></div>
-        
-        <div id="boardCenter"></div>
-
-        <div id="boardBottLeft"></div>
-        
-        <div id="boardBottRight"></div>
-
-
-        <button onclick="nada()">.........</button>
 
     </body>
 
