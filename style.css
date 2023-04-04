@@ -36,25 +36,6 @@ input[type=number] {
     border-color: aqua;
 }
 
-/*Cuadros de los numeros
-td {
-    border: 2px solid black;
-    border-collapse: collapse;
-    text-align: center;
-    width: 14px;
-    height: 14px;
-}
-*/
-/*Para los input de cada cuadro
-#numero{
-    font-size: 20px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-*/
-
 /*Clases*/
 .Sudoku{
     display: flex;
