@@ -1,15 +1,7 @@
-const board = [
-    [1, 2, 3, 4, 5, 6, 6, 8, 9],
-    [0, 3, 0, 0, 7, 1, 0, 4, 0],
-    [0, 0, 0, 0, 0, 0, 8, 0, 0],
-    [0, 0, 0, 9, 0, 8, 0, 7, 1],
-    [1, 0, 3, 0, 0, 0, 0, 0, 0],
-    [0, 0, 2, 0, 3, 0, 9, 0, 0],
-    [5, 1, 7, 0, 0, 6, 0, 0, 0],
-    [2, 0, 0, 0, 0, 0, 7, 0, 0],
-    [0, 0, 1, 8, 0, 0, 0, 0, 2],
-];
 
+/**
+ * Crea los cuadros del sudoku
+ */
 window.onload = function() {
     creatTopLeft();
     creatTopRight();
@@ -62,14 +54,17 @@ function creatTopLeft() {
     for (var columna = 0; columna < 9; columna++) {             //crea columnas
         var tr = document.createElement("tr");
         for (var fila = 0; fila < 9; fila++) {                  //crea filas 
-            if (fila == 6 && columna >= 6){
-                break;
-            }
             var td = document.createElement("td");              //va creando las filas
             var numero = document.createElement("input");       //el cuadro para escribir el numero
-            numero.type = "number";                             //hace el cuadro de tipo numerico
-            //numero.id = columna.toString() + fila.toString(); //se crea el id, ej: 00,01,02
-            //numero.value = (sudokuTopLeft[columna][fila]);    //con esto se crea el numero del sudoku generado aleatoriamente
+            
+            numero.type = "number";                              //hace el cuadro de tipo numerico
+            nombre = "TL" + fila.toString() + columna.toString();//Crea el id, ej: C00,C01,C02 hasta C88
+            numero.id = nombre;
+
+            if (fila >= 6 && columna >= 6){
+                numero.type = "hidden";  
+            }
+
             tr.appendChild(numero);                             //agrega el cuadro a la fila
             tr.appendChild(td);                                 //se agrega el elemento de la fila al tr, va desde el index 0 hasta el 9
         }
@@ -85,26 +80,21 @@ function creatTopRight() {
     var tbody = document.createElement("tbody");
 
     for (var columna = 0; columna < 9; columna++) {                 //crea columnas
-        var tr = document.createElement("tr");
-        for (var fila = 0; fila < 9; fila++) {                      //crea filas
+        var tr = document.createElement("tr");                      //crea filas
+        for (var fila = 0; fila < 9; fila++) {    
+            var td = document.createElement("td");                   //va creando las filas
+            var numero = document.createElement("input");           //el cuadro para escribir el numero   
+
+            numero.type = "number";    
+            nombre = "TR" + fila.toString() + columna.toString();
+            numero.id = nombre; 
+
             if (columna >= 6 && fila <= 2) {                        //para no crear cuadros de mas
-                var td = document.createElement("td");              //va creando las filas
-                var numero = document.createElement("input");       //el cuadro para escribir el numero
                 numero.type = "hidden";                             //oculta los cuadros
-                //numero.id = columna.toString() + fila.toString();   //se crea el id, ej: 00,01,02
-                //numero.value = (sudokuTopRight[columna][fila]);     //con esto se crea el numero del sudoku generado aleatoriamente
-                td.appendChild(numero);
-                tr.appendChild(td);
             } 
-            else{
-                var td = document.createElement("td");              //va creando las filas
-                var numero = document.createElement("input");       //el cuadro para escribir el numero
-                numero.type = "number";    
-                //numero.id = columna.toString() + fila.toString();   //se crea el id, ej: 00,01,02
-                //numero.value = (sudokuTopRight[columna][fila]);     //con esto se crea el numero del sudoku generado aleatoriamente
-                td.appendChild(numero);
-                tr.appendChild(td);
-            }     
+            
+            td.appendChild(numero);
+            tr.appendChild(td);
         }
         tbody.appendChild(tr);//se agrega la fila a la tabla
     }
@@ -122,11 +112,11 @@ function creatCenter() {
         for (var fila = 0; fila < 9; fila++) {                  //crea filas
             var td = document.createElement("td");              //va creando las filas
             var numero = document.createElement("input");       //el cuadro para escribir el numero
+            
             numero.type = "number";                             //tipo numerico
-            nombre = "C" + columna.toString() + fila.toString();//Crea el id, ej: C00,C01,C02 hasta C88
+            nombre = "C" + fila.toString() + columna.toString();//Crea el id, ej: C00,C01,C02 hasta C88
             numero.id = nombre;   
 
-            //numero.value = (sudokuCenter[columna][fila]);       //con esto se crea el numero del sudoku generado aleatoriamente
             td.appendChild(numero);                             //agrega el cuadro a la fila
             tr.appendChild(td);                                 //se agrega el elemento de la fila al tr, va desde el index 0 hasta el 9
         }
@@ -141,21 +131,24 @@ function creatBottLeft() {
     var tabla = document.createElement("table");
     var tbody = document.createElement("tbody");
 
-    for (var columna = 0; columna < 9; columna++) {             //crea columnas
+    for (var columna = 0; columna < 9; columna++) {                 //crea columnas
         var tr = document.createElement("tr");
-        for (var fila = 0; fila < 9; fila++) {                  //crea filas 
-            if (fila == 6 && columna <= 2) { 
-                break;
+        for (var fila = 0; fila < 9; fila++) {                      //crea filas 
+            var td = document.createElement("td");                  //va creando las filas
+            var numero = document.createElement("input");           //el cuadro para escribir el numero
+            
+            numero.type = "number"; 
+            nombre = "BL" + fila.toString() + columna.toString();   //Crea el id, ej: C00,C01,C02 hasta C88
+            numero.id = nombre; 
+
+            if (fila >= 6 && columna <= 2) { 
+                numero.type = "hidden";  
             }
-            var td = document.createElement("td");              //va creando las filas
-            var numero = document.createElement("input");       //el cuadro para escribir el numero
-            numero.type = "number";                             //hace el cuadro de tipo numerico
-            //numero.id = columna.toString() + fila.toString();   //se crea el id, ej: 00,01,02
-            //numero.value = (sudokuBottLeft[columna][fila]);       //con esto se crea el numero del sudoku generado aleatoriamente
-            tr.appendChild(numero);                             //agrega el cuadro a la fila
-            tr.appendChild(td);                                  //se agrega el elemento de la fila al tr, va desde el index 0 hasta el 9
+
+            tr.appendChild(numero);                                 //agrega el cuadro a la fila
+            tr.appendChild(td);                                     //se agrega el elemento de la fila al tr, va desde el index 0 hasta el 9
         }
-        tbody.appendChild(tr);                                  //se agrega la fila a la tabla
+        tbody.appendChild(tr);                                      //se agrega la fila a la tabla
     }
     tabla.appendChild(tbody);
 
@@ -169,24 +162,19 @@ function creatBottRight() {
     for (var columna = 0; columna < 9; columna++) {                 //crea columnas
         var tr = document.createElement("tr");
         for (var fila = 0; fila < 9; fila++) {                      //crea filas
+            var td = document.createElement("td");                  //va creando las filas
+            var numero = document.createElement("input");           //el cuadro para escribir el numero
+
+            numero.type = "number";    
+            nombre = "BR" + columna.toString() + fila.toString();   //Crea el id, ej: C00,C01,C02 hasta C88
+            numero.id = nombre;
+
             if (columna <= 2 && fila <= 2) {                         //para no crear cuadros de mas
-                var td = document.createElement("td");              //va creando las filas
-                var numero = document.createElement("input");       //el cuadro para escribir el numero
                 numero.type = "hidden";                             //oculta los cuadros
-                //numero.id = columna.toString() + fila.toString();   //se crea el id, ej: 00,01,02
-                //numero.value = (sudokuTopRight[columna][fila]);     //con esto se crea el numero del sudoku generado aleatoriamente
-                td.appendChild(numero);
-                tr.appendChild(td);
             } 
-            else{
-                var td = document.createElement("td");              //va creando las filas
-                var numero = document.createElement("input");       //el cuadro para escribir el numero
-                numero.type = "number";    
-                //numero.id = columna.toString() + fila.toString();   //se crea el id, ej: 00,01,02
-                //numero.value = (sudokuTopRight[columna][fila]);     //con esto se crea el numero del sudoku generado aleatoriamente
-                td.appendChild(numero);
-                tr.appendChild(td);
-            }     
+
+            td.appendChild(numero);
+            tr.appendChild(td);
         }
         tbody.appendChild(tr);//se agrega la fila a la tabla
     }
@@ -194,13 +182,13 @@ function creatBottRight() {
 
     document.getElementById("boardBottRight").appendChild(tabla);
 }
-
+/*
 function prueba()
 {
     let input = document.getElementById("C00");
     input.style.backgroundColor = "red";
 }
-
+*/
 function esValido(sudoku, fila, columna, num) {
     for (let i = 0; i < 9; i++) {
         if (sudoku[fila][i] === num || sudoku[i][columna] === num) {
@@ -220,7 +208,12 @@ function esValido(sudoku, fila, columna, num) {
     return true; //el numero es valido
 }
 
-function generarSudoku1(nombreSudoku) {
+/**
+ * Funcion para generar sudokus aleatorios internamente en el codigo
+ * @param {string} nombreSudoku 
+ * @returns sudoku (matriz 9x9 de numeros aleatorios, con espacios en null para completarlo)
+ */
+function generarSudoku1() {
     // Crear una matriz 9x9 para el Sudoku vacío
     let sudoku = [];
     for (let i = 0; i < 9; i++) {
@@ -242,27 +235,6 @@ function generarSudoku1(nombreSudoku) {
     // Se llena el Sudoku celda por celda
     for (var columna = 0; columna < 9; columna++) {             //crea Columnas
         for (var fila = 0; fila < 9; fila++) {                  //crea Filas
-            //para crear los sudokus
-            if(nombreSudoku === "TopLeft"){
-                if (fila == 6 && columna >= 6){
-                    break;
-                }
-            }
-            if(nombreSudoku === "TopRight"){
-                if (columna >= 6 && fila <= 2) { 
-                    break;
-                }
-            }
-            if(nombreSudoku === "BottLeft"){
-                if (fila == 6 && columna <= 2) { 
-                    break;
-                }
-            }
-            if(nombreSudoku === "BottRight"){
-                if (columna <= 2 && fila <= 2) { 
-                    break;
-                }
-            }
             // Se genera un número aleatorio para la celda
             sudoku[fila][columna] = generarNumeroNoRepetido(fila, columna);
             // Se vacía la celda con una probabilidad aleatoria
@@ -275,37 +247,105 @@ function generarSudoku1(nombreSudoku) {
     return sudoku;
 }
 
+/**
+ * Funcion para limpiar el sudoku
+ */
 function limpiarSudoku(){
-    for (var i = 0; i < 6; i++) {                                           //crea Columnas
-        for (var filas = 0; filas < 9; filas++) {                           //crea Columnas
-            for (var columnas = 0; columnas < 9; columnas++) {              //crea Columnas
-                nombre = "C" + filas.toString() + columnas.toString();
-                let input = document.getElementById(nombre);
-                input.value = null;
-            }
+    for (var filas = 0; filas < 9; filas++) {                           
+        for (var columnas = 0; columnas < 9; columnas++) {     
+            nombre = "TL" + filas.toString() + columnas.toString();
+            let input = document.getElementById(nombre);      
+            input.value = null;
+        }
+    }
+
+    for (var filas = 0; filas < 9; filas++) {                           
+        for (var columnas = 0; columnas < 9; columnas++) {  
+            nombre = "TR" + filas.toString() + columnas.toString();              
+            let input = document.getElementById(nombre);           
+            input.value = null;
+        }
+    }
+
+    for (var filas = 0; filas < 9; filas++) {                           
+        for (var columnas = 0; columnas < 9; columnas++) {              
+            nombre = "C" + filas.toString() + columnas.toString();
+            let input = document.getElementById(nombre);
+            input.value = null;
+        }
+    }
+    
+    for (var filas = 0; filas < 9; filas++) {                           
+        for (var columnas = 0; columnas < 9; columnas++) {     
+            nombre = "BL" + filas.toString() + columnas.toString();
+            let input = document.getElementById(nombre);
+            input.value = null;
+        }
+    }
+
+    for (var filas = 0; filas < 9; filas++) {                           
+        for (var columnas = 0; columnas < 9; columnas++) {            
+            nombre = "BR" + filas.toString() + columnas.toString();
+            let input = document.getElementById(nombre);
+            input.value = null;
         }
     }
 }
+
+/**
+ * Funcion para generar que los numeros se vean en la pagina web
+ */
 
 function generarTableros(){
-    let sudokuCenter = generarSudoku1(null);                                //aqui crea un sudoku aletoriamente siempre
-    for (var i = 0; i < 6; i++) {                                           //crea Columnas
-        for (var filas = 0; filas < 9; filas++) {                           //crea Columnas
-            for (var columnas = 0; columnas < 9; columnas++) {              //crea Columnas
-                nombre = "C" + filas.toString() + columnas.toString();
-                let input = document.getElementById(nombre);
-                input.value = sudokuCenter[filas][columnas];
+    let sudokuTopLeft = generarSudoku1();                               //aqui crea un sudoku aletoriamente siempre                                           
+    for (var filas = 0; filas < 9; filas++) {                           
+        for (var columnas = 0; columnas < 9; columnas++) {     
+            nombre = "TL" + filas.toString() + columnas.toString();
+            let input = document.getElementById(nombre);      
+            input.value = sudokuTopLeft[filas][columnas];
+        }
+    }
+    
+
+    let sudokuTopRight = generarSudoku1();                                //aqui crea un sudoku aletoriamente siempre                                          
+        for (var filas = 0; filas < 9; filas++) {                           
+            for (var columnas = 0; columnas < 9; columnas++) {  
+                nombre = "TR" + filas.toString() + columnas.toString();              
+                let input = document.getElementById(nombre);           
+                input.value = sudokuTopRight[filas][columnas];
             }
+        }
+    
+
+    let sudokuCenter = generarSudoku1();                                   //aqui crea un sudoku aletoriamente siempre
+    for (var filas = 0; filas < 9; filas++) {                           
+        for (var columnas = 0; columnas < 9; columnas++) {              
+            nombre = "C" + filas.toString() + columnas.toString();
+            let input = document.getElementById(nombre);
+            input.value = sudokuCenter[filas][columnas];
+        }
+    }
+
+    let sudokuBottLeft = generarSudoku1();                                //aqui crea un sudoku aletoriamente siempre                                  
+    for (var filas = 0; filas < 9; filas++) {                           
+        for (var columnas = 0; columnas < 9; columnas++) {     
+            nombre = "BL" + filas.toString() + columnas.toString();
+            let input = document.getElementById(nombre);
+            input.value = sudokuBottLeft[filas][columnas];
+        }
+    }
+    
+    let sudokuBottRight = generarSudoku1();  
+    for (var filas = 0; filas < 9; filas++) {                           
+        for (var columnas = 0; columnas < 9; columnas++) {            
+            nombre = "BR" + filas.toString() + columnas.toString();
+            let input = document.getElementById(nombre);
+            input.value = sudokuBottRight[filas][columnas];
         }
     }
 }
+
+
+
 /**********************************************************************************************************/ 
-
-/*ME FALTA TERMINAR ESTO*/ 
-let sudokuTopLeft = generarSudoku1("TopLeft");
-let sudokuTopRight = generarSudoku1("TopRight");
-let sudokuBottLeft = generarSudoku1("BottLeft");
-let sudokuBottRight = generarSudoku1("BottRight");
-
-
 
