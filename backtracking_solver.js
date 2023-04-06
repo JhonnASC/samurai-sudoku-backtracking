@@ -120,11 +120,13 @@ function resolverSudoku(board){
       if (board[y][x] === 0) {  // si la casilla no tiene numero
         for (let num = 1; num <= 9; num++) {  // pruebo del 1 al 9
           board[y][x] = num;           // seteo la casilla en el numero
-          if (esValido(board, y, x)) {       // si la jugada es posible
+          if (esValido(board, y, x)) { 
+            imprimirSudoku(board)      // si la jugada es posible
             if (resolverSudoku(board)) {    // recursivo 
               return board;                
             }
           }
+          imprimirSudoku(board)
           board[y][x] = 0;                // si no es posible devuelvo el valor a 0 
         }
         return false;                  // si no se puede resolver
@@ -156,26 +158,6 @@ function imprimirSudoku(board) {
   }
 }
 
-function printSamuraiSudoku(board1, board2, board3, board4, board5) {
-  const divider = "+-------+-------+-------+";
-  const samuraiBoard = [
-    [board1, board2, board3],
-    [board4, board5, board4],
-    [board3, board2, board1],
-  ];
+resolverSudoku(board1)
 
-  for (let i = 0; i < samuraiBoard.length; i++) {
-    console.log(divider);
-    for (let j = 0; j < samuraiBoard[i].length; j++) {
-      const board = samuraiBoard[i][j];
-      for (let k = 0; k < board.length; k += 3) {
-        const row = board[k].join("  ") + " | " + board[k + 1].join("  ") + " | " + board[k + 2].join("  ");
-        console.log(`| ${row} |`);
-      }
-    }
-  }
-  console.log(divider);
-}
-
-printSamuraiSudoku(board1, board2, board3, board4, board5);
 
