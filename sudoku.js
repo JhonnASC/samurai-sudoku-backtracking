@@ -348,4 +348,35 @@ function generarTableros(){
 
 
 /**********************************************************************************************************/ 
+const board = [
+    [1, 0, 3, 0, 0, 0, 0, 0, 0],
+    [0, 0, 2, 0, 3, 0, 9, 0, 0],
+    [5, 1, 7, 0, 0, 6, 0, 0, 0],
+    [2, 0, 0, 0, 0, 0, 7, 0, 0],
+    [0, 0, 1, 8, 0, 0, 0, 0, 2],
+    [2, 0, 0, 0, 0, 0, 7, 3, 7],
+    [0, 0, 1, 6, 0, 0, 0, 0, 2],
+];
 
+function revisar_submatriz(board, revisar_x, revisar_y) {
+
+    const primeraX = Math.floor(revisar_x / 3) * 3;
+    const primeraY = Math.floor(revisar_y / 3) * 3;
+    const numRevisar = board[revisar_x][revisar_y];
+
+    for (let i = primeraX; i < primeraX + 3; i++) {
+        for (let j = primeraY; j < primeraY + 3; j++) {
+            if (i !== revisar_x || j !== revisar_y) { // Verificar si la posición actual no es la posición a revisar
+                if (board[i][j] === numRevisar) { // Verificar si el valor en la posición actual es igual al valor a revisar
+                    return false; // Si encuentra uno igual, retornar false
+                }
+            }
+        }
+    }
+
+    return true; // Si no encuentra ningún número igual, retornar true
+}
+
+console.log(board[8][3])
+console.log("......................................")
+console.log(revisar_submatriz(board,8,3))
