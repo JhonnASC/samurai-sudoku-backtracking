@@ -10,38 +10,65 @@ window.onload = function() {
     creatBottRight();
 }
 
-function revisar_eje_y(board, revisar_y, revisar_x) {
-    for (let i = 0; i < 9; i++) {
-        
+// TABLEROS // 
+const sudokuTopLeft = [                 
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+];
 
-        if (i !== revisar_y ){
-        if(board[i][revisar_x] === board[revisar_y][revisar_x]) {
-        return false;
-        }
-        }
-    }
-    return true;
-}
+const sudokuTopRight = [               
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+];
+const sudokuCenter = [            
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+];
+const sudokuBottLeft = [              
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+];
 
-function revisar_eje_x(board, revisar_y, revisar_x) {
-    for (let i = 0; i < 9; i++) {
-        
+const sudokuBottRight = [              
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+];
 
-        if (i !== revisar_x){
-        if(board[revisar_y][i] === board[revisar_y][revisar_x]) {
-        return false;
-        }
-        }
-    }
-    return true;
-}
-
-function solver(board) {
-    for (let x = 0; x < 9; x++) {
-        for(let y = 0; y<9; y++){
-        }
-    }
-}
 
 /************************************************************************************************************
  * Funciones para la creacion del sudoku y algunos apartados visuales
@@ -189,7 +216,7 @@ function prueba()
     input.style.backgroundColor = "red";
 }
 */
-function esValido(sudoku, fila, columna, num) {
+function esValidoGenerador(sudoku, fila, columna, num) {
     for (let i = 0; i < 9; i++) {
         if (sudoku[fila][i] === num || sudoku[i][columna] === num) {
         return false;
@@ -226,7 +253,7 @@ function generarSudoku1() {
             let indice = Math.floor(Math.random() * numeros.length);
             let num = numeros[indice];
             numeros.splice(indice, 1);
-            if (esValido(sudoku, fila, columna, num)) {
+            if (esValidoGenerador(sudoku, fila, columna, num)) {
                 return num;
             }
         }
@@ -296,6 +323,16 @@ function limpiarSudoku(){
  * Funcion para generar que los numeros se vean en la pagina web
  */
 
+function actualizarPantalla(tablero,nombreDado){
+for (var filas = 0; filas < 9; filas++) {                           
+    for (var columnas = 0; columnas < 9; columnas++) {     
+        nombre = nombreDado + filas.toString() + columnas.toString();
+        let input = document.getElementById(nombre);      
+        input.value = tablero[filas][columnas];
+    }
+
+}
+}
 function generarTableros(){
     let sudokuTopLeft = generarSudoku1();                               //aqui crea un sudoku aletoriamente siempre                                           
     for (var filas = 0; filas < 9; filas++) {                           
@@ -304,9 +341,10 @@ function generarTableros(){
             let input = document.getElementById(nombre);      
             input.value = sudokuTopLeft[filas][columnas];
         }
-    }
-    
 
+    }
+
+    
     let sudokuTopRight = generarSudoku1();                                //aqui crea un sudoku aletoriamente siempre                                          
         for (var filas = 0; filas < 9; filas++) {                           
             for (var columnas = 0; columnas < 9; columnas++) {  
@@ -345,7 +383,136 @@ function generarTableros(){
     }
 }
 
+// --------------------------------------------------------------------
+// CODIGO BACKTRACKING 
+//---------------------------------------------------------------------
 
+<<<<<<< Updated upstream
 
 /**********************************************************************************************************/ 
 
+=======
+function revisar_eje_y(board, revisar_y, revisar_x) {
+    for (let i = 0; i < 9; i++) {
+        
+  
+      if (i !== revisar_y ){
+        if(board[i][revisar_x] === board[revisar_y][revisar_x]) {
+        return false;
+      }
+      }
+    }
+    return true;
+  }
+  
+  function revisar_eje_x(board, revisar_y, revisar_x) {
+    for (let i = 0; i < 9; i++) {
+        
+  
+      if (i !== revisar_x){
+        if(board[revisar_y][i] === board[revisar_y][revisar_x]) {
+        return false;
+      }
+      }
+    }
+    return true;
+  }
+  
+  function revisar_submatriz(board, revisar_y, revisar_x) {
+    const primeraX = Math.floor(revisar_x / 3) * 3;
+    const primeraY = Math.floor(revisar_y / 3) * 3;
+    const numRevisar = board[revisar_y][revisar_x];
+  
+    for (let i = primeraY; i < primeraY + 3; i++) {
+      for (let j = primeraX; j < primeraX + 3; j++) {
+        if (i !== revisar_y || j !== revisar_x) { // Verificar si la posición actual no es la posición a revisar
+          if (board[i][j] === numRevisar) { // Verificar si el valor en la posición actual es igual al valor a revisar
+            return false; // Si encuentra uno igual, retornar false
+          }
+        }
+      }
+    }
+  
+    return true; // Si no encuentra ningún número igual, retornar true
+  }
+  
+  
+  function esValido(board,y,x){
+  
+    if(revisar_eje_x(board,y,x) && revisar_eje_y(board,y,x) && revisar_submatriz(board,y,x) === true ){
+      return true
+    }
+    else {
+      return false
+    }
+  
+  }
+  
+  
+  function resolverSudoku(board){
+    for (let y = 0; y < board.length; y++) {
+      for (let x = 0; x < board[y].length; x++) { //ciclo x y
+        if (board[y][x] === null) {  // si la casilla no tiene numero
+          for (let num = 1; num <= 9; num++) {  // pruebo del 1 al 9
+            board[y][x] = num;           // seteo la casilla en el numero
+            if (esValido(board, y, x)) { 
+              imprimirSudoku(board)      // si la jugada es posible
+              if (resolverSudoku(board)) {    // recursivo 
+                return board;                
+              }
+            }
+            imprimirSudoku(board)
+            board[y][x] = null;                // si no es posible devuelvo el valor a 0 
+          }
+          return false;                  // si no se puede resolver
+        }
+      }
+    }
+    return board;                       // retorno la matriz
+  }
+  
+  
+  function imprimirSudoku(board) {
+    console.log("  1 2 3   4 5 6   7 8 9"); // imprimir los encabezados de columna
+    console.log("+-------+-------+-------+");
+  
+    for (let i = 0; i < 9; i++) {
+      let rowStr = "";
+      for (let j = 0; j < 9; j++) {
+        if (j % 3 === 0) {
+          rowStr += "| ";
+        }
+        const val = board[i][j] === 0 ? " " : board[i][j];
+        rowStr += `${val} `;
+      }
+      rowStr += "|";
+      console.log(`${i+1} ${rowStr}`);
+      if ((i + 1) % 3 === 0) {
+        console.log("+-------+-------+-------+");
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------
+//  FINAL CODIGO BACKTRACKING 
+//---------------------------------------------------------------------
+
+function  resolverBacktracking(){
+
+    resolverSudoku(sudokuCenter)
+    resolverSudoku(sudokuTopLeft)
+    resolverSudoku(sudokuTopRight)
+    resolverSudoku(sudokuBottLeft)
+    resolverSudoku(sudokuBottRight)
+
+
+    actualizarPantalla(sudokuCenter,"C")
+    actualizarPantalla(sudokuTopLeft,"TL")
+    actualizarPantalla(sudokuTopRight,"TR")
+    actualizarPantalla(sudokuBottLeft, "BL")
+    actualizarPantalla(sudokuBottRight,"BR")
+    
+
+
+}
+>>>>>>> Stashed changes
