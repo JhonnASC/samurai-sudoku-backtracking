@@ -482,10 +482,12 @@ function revisar_eje_y(board, revisar_y, revisar_x) {
                         }
                     }
                     input.style.backgroundColor = "red";
-                        actualizarPantalla(board,nombreDado)
-                        await sleep(200);
-                        input.style.backgroundColor = "black";
-                    board[y][x] = null;                            // si no es posible devuelvo el valor a null 
+                    actualizarPantalla(board,nombreDado)
+                    await sleep(200);
+                    input.style.backgroundColor = "black";    
+                    board[y][x] = null;  
+                    actualizarPantalla(board,nombreDado)
+                                             // si no es posible devuelvo el valor a null 
                 }
                 return false;                                      // si no se puede resolver
             }
@@ -566,15 +568,7 @@ function actualizarEsquinas(){
              
          }
     }
-    console.log("TL")
-    console.log(sudokuTopLeft)
-    console.log("TR")
-    console.log(sudokuTopRight)
-    console.log("BT")
-    console.log(sudokuBottLeft)
-    console.log("BR")
-    console.log(sudokuBottRight)
-
+  
 }
 
 
@@ -585,23 +579,31 @@ async function  resolverBacktracking(){
     actualizarEsquinas()
 
     resolverSudoku(sudokuTopLeft, "TL")
-    await sleep(2000)
     resolverSudoku(sudokuTopRight, "TR")
     resolverSudoku(sudokuBottLeft, "BL")
     resolverSudoku(sudokuBottRight, "BR")
 
 
-    
-
-    
-
+    await sleep(10000)
 
 
   
+  
 
+}
 
+function imprimir(){
+    console.log("TL")
+    console.log(sudokuTopLeft)
+    console.log("TR")
+    console.log(sudokuTopRight)
+    console.log("BT")
+    console.log(sudokuBottLeft)
+    console.log("BR")
+    console.log(sudokuBottRight)
+    console.log("Center")
+    console.log(sudokuCenter)
 
-    
 
 
 }
