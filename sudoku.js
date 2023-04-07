@@ -10,38 +10,65 @@ window.onload = function() {
     creatBottRight();
 }
 
-function revisar_eje_y(board, revisar_y, revisar_x) {
-    for (let i = 0; i < 9; i++) {
-        
+// TABLEROS // 
+var sudokuTopLeft = [                 
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+];
 
-        if (i !== revisar_y ){
-        if(board[i][revisar_x] === board[revisar_y][revisar_x]) {
-        return false;
-        }
-        }
-    }
-    return true;
-}
+let sudokuTopRight = [               
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+];
+var  sudokuCenter = [            
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+];
+let  sudokuBottLeft = [              
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+];
 
-function revisar_eje_x(board, revisar_y, revisar_x) {
-    for (let i = 0; i < 9; i++) {
-        
+let  sudokuBottRight = [              
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+[null, null, null, null, null, null, null, null, null],
+];
 
-        if (i !== revisar_x){
-        if(board[revisar_y][i] === board[revisar_y][revisar_x]) {
-        return false;
-        }
-        }
-    }
-    return true;
-}
-
-function solver(board) {
-    for (let x = 0; x < 9; x++) {
-        for(let y = 0; y<9; y++){
-        }
-    }
-}
 
 /************************************************************************************************************
  * Funciones para la creacion del sudoku y algunos apartados visuales
@@ -58,7 +85,7 @@ function creatTopLeft() {
             var numero = document.createElement("input");       //el cuadro para escribir el numero
             
             numero.type = "number";                              //hace el cuadro de tipo numerico
-            nombre = "TL" + fila.toString() + columna.toString();//Crea el id, ej: C00,C01,C02 hasta C88
+            nombre = "TL" + columna.toString() + fila.toString();//Crea el id, ej: C00,C01,C02 hasta C88
             numero.id = nombre;
 
             if (fila >= 6 && columna >= 6){
@@ -86,7 +113,7 @@ function creatTopRight() {
             var numero = document.createElement("input");           //el cuadro para escribir el numero   
 
             numero.type = "number";    
-            nombre = "TR" + fila.toString() + columna.toString();
+            nombre = "TR" + columna.toString() + fila.toString();
             numero.id = nombre; 
 
             if (columna >= 6 && fila <= 2) {                        //para no crear cuadros de mas
@@ -114,7 +141,7 @@ function creatCenter() {
             var numero = document.createElement("input");       //el cuadro para escribir el numero
             
             numero.type = "number";                             //tipo numerico
-            nombre = "C" + fila.toString() + columna.toString();//Crea el id, ej: C00,C01,C02 hasta C88
+            nombre = "C" + columna.toString() + fila.toString();//Crea el id, ej: C00,C01,C02 hasta C88
             numero.id = nombre;   
 
             td.appendChild(numero);                             //agrega el cuadro a la fila
@@ -138,7 +165,7 @@ function creatBottLeft() {
             var numero = document.createElement("input");           //el cuadro para escribir el numero
             
             numero.type = "number"; 
-            nombre = "BL" + fila.toString() + columna.toString();   //Crea el id, ej: C00,C01,C02 hasta C88
+            nombre = "BL" + columna.toString() + fila.toString();   //Crea el id, ej: C00,C01,C02 hasta C88
             numero.id = nombre; 
 
             if (fila >= 6 && columna <= 2) { 
@@ -189,7 +216,7 @@ function prueba()
     input.style.backgroundColor = "red";
 }
 */
-function esValido(sudoku, fila, columna, num) {
+function esValidoGenerador(sudoku, fila, columna, num) {
     for (let i = 0; i < 9; i++) {
         if (sudoku[fila][i] === num || sudoku[i][columna] === num) {
         return false;
@@ -226,7 +253,7 @@ function generarSudoku1() {
             let indice = Math.floor(Math.random() * numeros.length);
             let num = numeros[indice];
             numeros.splice(indice, 1);
-            if (esValido(sudoku, fila, columna, num)) {
+            if (esValidoGenerador(sudoku, fila, columna, num)) {
                 return num;
             }
         }
@@ -238,7 +265,7 @@ function generarSudoku1() {
             // Se genera un número aleatorio para la celda
             sudoku[fila][columna] = generarNumeroNoRepetido(fila, columna);
             // Se vacía la celda con una probabilidad aleatoria
-            if (Math.random() < 0.4) { //CON ESTE PRACTICAMENTE SE CAMBIA LA DIFICULTAD, SE HACEN MENOS O MAS NUMEROS
+            if (Math.random() < 0.9) { //CON ESTE PRACTICAMENTE SE CAMBIA LA DIFICULTAD, SE HACEN MENOS O MAS NUMEROS
                 sudoku[fila][columna] = null;
             }
         }
@@ -251,6 +278,16 @@ function generarSudoku1() {
  * Funcion para limpiar el sudoku
  */
 function limpiarSudoku(){
+
+    for (var filas = 0; filas < 9; filas++) {
+        for (var columnas = 0; columnas < 9; columnas++) {
+            sudokuTopLeft[filas][columnas] = null;
+            sudokuTopRight[filas][columnas] = null;
+            sudokuCenter[filas][columnas] = null;
+            sudokuBottLeft[filas][columnas] = null;
+            sudokuBottRight[filas][columnas] = null;
+        }
+    }
     for (var filas = 0; filas < 9; filas++) {                           
         for (var columnas = 0; columnas < 9; columnas++) {     
             nombre = "TL" + filas.toString() + columnas.toString();
@@ -296,18 +333,29 @@ function limpiarSudoku(){
  * Funcion para generar que los numeros se vean en la pagina web
  */
 
+function actualizarPantalla(tablero,nombreDado){
+for (var filas = 0; filas < 9; filas++) {                           
+    for (var columnas = 0; columnas < 9; columnas++) {     
+        nombre = nombreDado + filas.toString() + columnas.toString();
+        let input = document.getElementById(nombre);      
+        input.value = tablero[filas][columnas];
+    }
+
+}
+}
 function generarTableros(){
-    let sudokuTopLeft = generarSudoku1();                               //aqui crea un sudoku aletoriamente siempre                                           
+        sudokuTopLeft = generarSudoku1();                               //aqui crea un sudoku aletoriamente siempre                                           
     for (var filas = 0; filas < 9; filas++) {                           
         for (var columnas = 0; columnas < 9; columnas++) {     
             nombre = "TL" + filas.toString() + columnas.toString();
             let input = document.getElementById(nombre);      
             input.value = sudokuTopLeft[filas][columnas];
         }
-    }
-    
 
-    let sudokuTopRight = generarSudoku1();                                //aqui crea un sudoku aletoriamente siempre                                          
+    }
+
+    
+     sudokuTopRight = generarSudoku1();                                //aqui crea un sudoku aletoriamente siempre                                          
         for (var filas = 0; filas < 9; filas++) {                           
             for (var columnas = 0; columnas < 9; columnas++) {  
                 nombre = "TR" + filas.toString() + columnas.toString();              
@@ -317,7 +365,7 @@ function generarTableros(){
         }
     
 
-    let sudokuCenter = generarSudoku1();                                   //aqui crea un sudoku aletoriamente siempre
+     sudokuCenter = generarSudoku1();                                   //aqui crea un sudoku aletoriamente siempre
     for (var filas = 0; filas < 9; filas++) {                           
         for (var columnas = 0; columnas < 9; columnas++) {              
             nombre = "C" + filas.toString() + columnas.toString();
@@ -326,7 +374,7 @@ function generarTableros(){
         }
     }
 
-    let sudokuBottLeft = generarSudoku1();                                //aqui crea un sudoku aletoriamente siempre                                  
+     sudokuBottLeft = generarSudoku1();                                //aqui crea un sudoku aletoriamente siempre                                  
     for (var filas = 0; filas < 9; filas++) {                           
         for (var columnas = 0; columnas < 9; columnas++) {     
             nombre = "BL" + filas.toString() + columnas.toString();
@@ -335,7 +383,7 @@ function generarTableros(){
         }
     }
     
-    let sudokuBottRight = generarSudoku1();  
+        sudokuBottRight = generarSudoku1();  
     for (var filas = 0; filas < 9; filas++) {                           
         for (var columnas = 0; columnas < 9; columnas++) {            
             nombre = "BR" + filas.toString() + columnas.toString();
@@ -345,38 +393,215 @@ function generarTableros(){
     }
 }
 
+// --------------------------------------------------------------------
+// CODIGO BACKTRACKING 
+//---------------------------------------------------------------------
 
-
-/**********************************************************************************************************/ 
-const board = [
-    [1, 0, 3, 0, 0, 0, 0, 0, 0],
-    [0, 0, 2, 0, 3, 0, 9, 0, 0],
-    [5, 1, 7, 0, 0, 6, 0, 0, 0],
-    [2, 0, 0, 0, 0, 0, 7, 0, 0],
-    [0, 0, 1, 8, 0, 0, 0, 0, 2],
-    [2, 0, 0, 0, 0, 0, 7, 3, 7],
-    [0, 0, 1, 6, 0, 0, 0, 0, 2],
-];
-
-function revisar_submatriz(board, revisar_x, revisar_y) {
-
+function revisar_eje_y(board, revisar_y, revisar_x) {
+    for (let i = 0; i < 9; i++) {
+        
+  
+      if (i !== revisar_y ){
+        if(board[i][revisar_x] === board[revisar_y][revisar_x]) {
+        return false;
+      }
+      }
+    }
+    return true;
+  }
+  
+  function revisar_eje_x(board, revisar_y, revisar_x) {
+    for (let i = 0; i < 9; i++) {
+        
+  
+      if (i !== revisar_x){
+        if(board[revisar_y][i] === board[revisar_y][revisar_x]) {
+        return false;
+      }
+      }
+    }
+    return true;
+  }
+  
+  function revisar_submatriz(board, revisar_y, revisar_x) {
     const primeraX = Math.floor(revisar_x / 3) * 3;
     const primeraY = Math.floor(revisar_y / 3) * 3;
-    const numRevisar = board[revisar_x][revisar_y];
+    const numRevisar = board[revisar_y][revisar_x];
+  
+    for (let i = primeraY; i < primeraY + 3; i++) {
+      for (let j = primeraX; j < primeraX + 3; j++) {
+        if (i !== revisar_y || j !== revisar_x) { // Verificar si la posición actual no es la posición a revisar
+          if (board[i][j] === numRevisar) { // Verificar si el valor en la posición actual es igual al valor a revisar
+            return false; // Si encuentra uno igual, retornar false
+          }
+        }
+      }
+    }
+  
+    return true; // Si no encuentra ningún número igual, retornar true
+  }
+  
+  
+  function esValido(board,y,x){
+  
+    if(revisar_eje_x(board,y,x) && revisar_eje_y(board,y,x) && revisar_submatriz(board,y,x) === true ){
+      return true
+    }
+    else {
+      return false
+    }
+  
+  }
+  
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  async function resolverSudoku(board,nombreDado){
 
-    for (let i = primeraX; i < primeraX + 3; i++) {
-        for (let j = primeraY; j < primeraY + 3; j++) {
-            if (i !== revisar_x || j !== revisar_y) { // Verificar si la posición actual no es la posición a revisar
-                if (board[i][j] === numRevisar) { // Verificar si el valor en la posición actual es igual al valor a revisar
-                    return false; // Si encuentra uno igual, retornar false
+    for (let y = 0; y < board.length; y++) {
+        for (let x = 0; x < board[y].length; x++) {                 //ciclo x y
+
+        nombre = nombreDado + y.toString() + x.toString();
+        let input = document.getElementById(nombre);
+
+            if (board[y][x] === null) {                             // si la casilla no tiene numero
+                let nums = [1,2,3,4,5,6,7,8,9];
+                shuffle(nums);                                      // tiro shuffle al array de nums
+                
+                    for(let i=0; i< nums.length;i++){                                                            // pruebo los numeros del array
+                    board[y][x] = nums[i];                              // seteo la casilla en el numero
+                    if (esValido(board, y, x)) { 
+
+                        input.style.backgroundColor = "red";
+                        actualizarPantalla(board,nombreDado)
+                        await sleep(200);
+                        input.style.backgroundColor = "black";
+                        if (resolverSudoku(board,nombreDado)) {
+                                // recursivo 
+                            return board;
+                        }
+                    }
+                    input.style.backgroundColor = "red";
+                        actualizarPantalla(board,nombreDado)
+                        await sleep(200);
+                        input.style.backgroundColor = "black";
+                    board[y][x] = null;                            // si no es posible devuelvo el valor a null 
                 }
+                return false;                                      // si no se puede resolver
             }
         }
     }
-
-    return true; // Si no encuentra ningún número igual, retornar true
+    console.log(nombreDado)
+    return board;                       // retorno la matriz
 }
 
-console.log(board[8][3])
-console.log("......................................")
-console.log(revisar_submatriz(board,8,3))
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+  
+  
+  function imprimirSudoku(board) {
+    console.log("  1 2 3   4 5 6   7 8 9"); // imprimir los encabezados de columna
+    console.log("+-------+-------+-------+");
+  
+    for (let i = 0; i < 9; i++) {
+      let rowStr = "";
+      for (let j = 0; j < 9; j++) {
+        if (j % 3 === 0) {
+          rowStr += "| ";
+        }
+        const val = board[i][j] === 0 ? " " : board[i][j];
+        rowStr += `${val} `;
+      }
+      rowStr += "|";
+      console.log(`${i+1} ${rowStr}`);
+      if ((i + 1) % 3 === 0) {
+        console.log("+-------+-------+-------+");
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------
+//  FINAL CODIGO BACKTRACKING 
+//---------------------------------------------------------------------
+
+
+function actualizarEsquinas(){
+
+
+    // arreglo board de arriba izq  
+    for (let y = 6; y < 9; y++) {
+       for (let x = 6; x < 9 ; x++) {
+            sudokuTopLeft[y][x] = sudokuCenter[y-6][x-6]
+            
+        }
+    }
+
+    // arreglo board de arriba derecha
+
+    for (let y = 6; y < 9; y++) {
+        for (let x = 0; x < 3 ; x++) {
+             sudokuTopRight[y][x] = sudokuCenter[y-6][x+6]
+             
+         }
+    }
+
+     // arreglo board de abajo izq
+
+     for (let y = 0; y < 3; y++) {
+        for (let x = 6; x < 9 ; x++) {
+             sudokuBottLeft[y][x] = sudokuCenter[y+6][x-6]
+             
+         }
+    }
+
+    // arreglo board de abajo derecha
+
+    for (let y = 0; y < 3; y++) {
+        for (let x = 0; x < 3 ; x++) {
+             sudokuBottRight[y][x] = sudokuCenter[y+6][x+6]
+             
+         }
+    }
+    console.log("TL")
+    console.log(sudokuTopLeft)
+    console.log("TR")
+    console.log(sudokuTopRight)
+    console.log("BT")
+    console.log(sudokuBottLeft)
+    console.log("BR")
+    console.log(sudokuBottRight)
+
+}
+
+
+async function  resolverBacktracking(){
+    console.log("entre a backtracking")
+    resolverSudoku(sudokuCenter,"C")
+    await sleep(10000);
+    actualizarEsquinas()
+
+    resolverSudoku(sudokuTopLeft, "TL")
+    await sleep(2000)
+    resolverSudoku(sudokuTopRight, "TR")
+    resolverSudoku(sudokuBottLeft, "BL")
+    resolverSudoku(sudokuBottRight, "BR")
+
+
+    
+
+    
+
+
+
+  
+
+
+
+    
+
+
+}
