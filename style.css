@@ -26,73 +26,106 @@ input[type=number]::-webkit-outer-spin-button {
 /*Edita ciertos valores de los input para que esten correctamente en los cuadros*/
 input[type=number] {
     margin: 0; 
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     background-color: black;
     color: white;
     text-align: center;
     font-size: 26px;
     font-weight: bold;
-    border-color: aqua;
+    border-color: white;
 }
 
-/*Clases*/
-.Sudoku{
+
+/******************************************
+    Clases para los div y sus caracteristicas generales
+******************************************/
+.Sudoku{        /*Div de los sudokus*/
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 435px;
-    height: 405px;
+    width: 400px;
+    height: 400px;
     display: flex;
     flex-wrap: wrap;
     position: absolute;
-    background-color: white;
 }
 
-.boton{
-    background-color: rgb(113, 223, 154);
-    border-color: aquamarine;
-    width: 150px;
-    height: 60px;
-    font-size: 20px;
+.boton {
+    background-color: #007bff;
+    border: 2px solid #007bff;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 4px;
+    transition: background-color 0.3s ease-in-out;
 }
 
+/*Caracteristicas para que los botones se vean mejor*/
+.boton:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+.boton:active {
+    background-color: #0062cc;
+    border-color: #005cbf;
+    box-shadow: none;
+}
+.boton:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+@media (max-width: 767px) {
+    .boton {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+
+/***************************************
+Para posicionar los div correspondiente 
+****************************************/
 #boardTopLeft{
-    top: 41.5%;
-    left: 34.5%;;
+    top: 30.5%;
+    left: 35.8%;;
     transform: translate(-50%, -50%); /*ajusta la posición del div*/
 }
 
 #boardTopRight{
-    top: 40.5%;
-    left: 65.5%;
+    top: 30.4%;
+    left: 64%;
     transform: translate(-50%, -50%); /*ajusta la posición del div*/
 }
 
 #boardCenter{
-    top: 70%;
+    top: 57.5%;
     left: 50%;
     transform: translate(-50%, -50%); /*ajusta la posición del div*/
 }
 
 #boardBottLeft{
-    top: 99.9%;
-    left: 34.4%;
+    top: 84%;
+    left: 35.6%;
     transform: translate(-50%, -50%); /*ajusta la posición del div*/
 }
 
 #boardBottRight{
-    top: 99.8%;
-    left: 65.4%;
+    top: 84.5%;
+    left: 64.2%;
     transform: translate(-50%, -50%); /*ajusta la posición del div*/
 }
 
+/*Posiciona el div de los botones*/
 #botones{
     width: 100vw;
     height: 85px;
     background-color: lightblue;
     position: absolute;
-    bottom: -40%;
+    bottom: -15%;
 }
 
 
