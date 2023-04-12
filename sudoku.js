@@ -369,7 +369,6 @@ function actualizarEsquinas(){
     for (let y = 6; y < 9; y++) {
         for (let x = 6; x < 9 ; x++) {
             sudokuTopLeft[y][x] = sudokuCenter[y-6][x-6]
-            
         }
     }
 
@@ -378,7 +377,6 @@ function actualizarEsquinas(){
     for (let y = 6; y < 9; y++) {
         for (let x = 0; x < 3 ; x++) {
             sudokuTopRight[y][x] = sudokuCenter[y-6][x+6]
-            
         }
     }
 
@@ -387,7 +385,6 @@ function actualizarEsquinas(){
     for (let y = 0; y < 3; y++) {
         for (let x = 6; x < 9 ; x++) {
             sudokuBottLeft[y][x] = sudokuCenter[y+6][x-6]
-            
         }
     }
 
@@ -396,17 +393,8 @@ function actualizarEsquinas(){
     for (let y = 0; y < 3; y++) {
         for (let x = 0; x < 3 ; x++) {
             sudokuBottRight[y][x] = sudokuCenter[y+6][x+6]
-            
         }
     }
-    console.log("TL")
-    console.log(sudokuTopLeft)
-    console.log("TR")
-    console.log(sudokuTopRight)
-    console.log("BT")
-    console.log(sudokuBottLeft)
-    console.log("BR")
-    console.log(sudokuBottRight)
 }
 
 /*============================================================================================================/
@@ -514,31 +502,6 @@ async function resolverSudokuBack(board,nombreSudoku){
         }
     }
     return board;                       // retorno la matriz
-}
-
-/**
- * Funcion para imprimir el sudoku en la consola
- * @param {matriz} board 
- */
-function imprimirSudoku(board) {
-    console.log("  1 2 3   4 5 6   7 8 9"); // imprimir los encabezados de columna
-    console.log("+-------+-------+-------+");
-
-    for (let i = 0; i < 9; i++) {
-        let rowStr = "";
-            for (let j = 0; j < 9; j++) {
-                if (j % 3 === 0) {
-                    rowStr += "| ";
-                }
-                const val = board[i][j] === 0 ? " " : board[i][j];
-                rowStr += `${val} `;
-            }
-            rowStr += "|";
-            console.log(`${i+1} ${rowStr}`);
-            if ((i + 1) % 3 === 0) {
-                console.log("+-------+-------+-------+");
-            }
-    }
 }
 
 // --------------------------------------------------------------------
@@ -717,12 +680,68 @@ function desactivaBotones(){
 }
 
 
+
+/**
+ * Funcion para eliminar el numero dentro de la submatriz 3x3
+ * @param {*} matriz 
+ * @param {*} i 
+ * @param {*} j 
+ * @param {*} num 
+ */
+function eliminarNumeroRepetido(matriz, i, j, num) {
+    matriz[i][j] = null;
+    // Recorre la submatriz 3x3 y elimina el número repetido, pone null
+    for (let m = i; m < i + 3; m++) {
+        for (let n = j; n < j + 3; n++) {
+            if (matriz[m][n] === num) {
+                matriz[m][n] = null;
+            }
+        }
+    }
+}
+/**
+ * Funcion para verificar si un numero se repite dentro de una submatriz
+ * @param {*} matriz 
+ * @returns 
+ */
+function verificarSubmatrices(matriz) {
+    for (let i = 0; i < 9; i += 3) { // Recorre cada submatriz 3x3 de la matriz
+        for (let j = 0; j < 9; j += 3) {
+            const submatriz = []; // para crear una submatriz 3x3 a partir de la matriz principal
+            for (let k = i; k < i + 3; k++) {
+                submatriz.push(matriz[k].slice(j, j + 3));
+            }       
+            for (let num = 1; num <= 9; num++) { // Verifica si algún número del 1 al 9 se repite dentro de la submatriz
+                let repite = false;
+                for (let m = 0; m < 3; m++) {
+                    for (let n = 0; n < 3; n++) {
+                        if (submatriz[m][n] === num) {
+                            if (repite) { // Si se encontró el número repetido, eliminarlo de la matriz y retorna false
+                                eliminarNumeroRepetido(matriz, i + m, j + n, num);
+                                return false; 
+                            } 
+                            else {
+                                repite = true; // Si es la primera vez que se encuentra el número, establece el flag repite a true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // Si no se encontraron números repetidos en ninguna submatriz, retorna true
+    return true;
+}
+
+
+
 /**
  *  Funcion para verificar si los numeros se repiten internamente en el codigo, si se repiten, se elimina y se muestra que habia un error
  * @param {arra} matriz 
  * @returns 
  */
 function verificarNumeros(matriz, nombreCuadrados) {
+
     var error = false;
     // Verificar repetición en filas
     for (var fila = 0; fila < 9; fila++) {
@@ -755,22 +774,21 @@ function verificarNumeros(matriz, nombreCuadrados) {
             }
         }
     }
-    /**
-     * falta las submatriz
-     */
 
+    if(verificarSubmatrices(matriz) === false){  //verifica las submatrices y tambien elimina luego el elemento si se repite
+        error = true
+    }
+    
     if(error){
         document.getElementById("mensaje-error").style.display = "block";   //mensaje de error
         desactivaBotones()
         actualizarPantalla(matriz,nombreCuadrados)
+        
         return
     }
-    
-    //document.getElementById("mensaje").style.display = "block";   //mensaje normal
-    return
-    //return, no existen numeros repetidos
-}
 
+    return //return, no existen numeros repetidos
+}
 
 /**
  * Funcion que escribe los numeros del sudoku externo dentro del interior y luego verifica que no se repitan
@@ -865,11 +883,10 @@ function compruebaSudoku(){
                 }
             }
         }
-
-
     }
 
     //se llama esta funcion para verificar los numeros escritos, si es necesario se usa varias veces
+    actualizarEsquinas()
     verificarNumeros(sudokuTopLeft,"TL");
     verificarNumeros(sudokuTopRight,"TR");
     verificarNumeros(sudokuCenter,"C");
