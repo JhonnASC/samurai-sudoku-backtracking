@@ -7,16 +7,16 @@ window.onload = function() {
 }
 
 // TABLEROS // 
-//son sudokus 9x9 rellenados con null
-var sudokuTopLeft = creaSudokus();      
+//son tableros 9x9 rellenados con null
+var sudokuTopLeft = creaSudoku();      
 
-var sudokuTopRight = creaSudokus();
+var sudokuTopRight = creaSudoku();
 
-var  sudokuCenter = creaSudokus();
+var sudokuCenter = creaSudoku();
 
-var  sudokuBottLeft = creaSudokus();
+var sudokuBottLeft = creaSudoku();
 
-var  sudokuBottRight = creaSudokus();
+var sudokuBottRight = creaSudoku();
 
 
 /*============================================================================================================/
@@ -39,6 +39,7 @@ function crearInterfaz(){
                 for (var fila = 0; fila < 9; fila++) {                  //crea filas 
                     var td = document.createElement("td");              //va creando las filas
                     var numero = document.createElement("input");       //el cuadro para escribir el numero
+                    
                     
                     //pone las lineas horizontales
                     if (columna  === 2 || columna === 5){
@@ -125,7 +126,7 @@ function crearInterfaz(){
                 for (var fila = 0; fila < 9; fila++) {                  //crea filas
                     var td = document.createElement("td");              //va creando las filas
                     var numero = document.createElement("input");       //el cuadro para escribir el numero
-                    
+
                     //pone las lineas horizontales
                     if (columna  === 2 || columna === 5){
                         numero.style.borderBottom = '6px solid aqua';
@@ -253,8 +254,8 @@ function actualizarPantalla(tablero,nombre){
     for (var filas = 0; filas < 9; filas++) {                           
         for (var columnas = 0; columnas < 9; columnas++) {     
             cuadrado = nombre + filas.toString() + columnas.toString();     //para obtener el id del cuadro
-            let input = document.getElementById(cuadrado);      
-            input.value = tablero[filas][columnas];                         //cambia en poantalla
+            let input = document.getElementById(cuadrado);                  //crea el input con el id
+            input.value = tablero[filas][columnas];                         //cambia en pantalla
         }
     }
 }
@@ -286,7 +287,7 @@ async function actulizaCuadrado(cuadrado){
 /**
  * Funcion para crear un sudoku 9x9 lleno de null
  */
-function creaSudokus(){
+function creaSudoku(){
     let sudoku = [];
     for (let i = 0; i < 9; i++) {                   // Crear una matriz 9x9 para el Sudoku 
         sudoku.push(new Array(9).fill(null));
@@ -311,11 +312,12 @@ function esValidoGenerador(sudoku, fila, columna, num) {
     // Verifica si el número ya está en el cuadrado 3x3 actual
     let filaInicio = Math.floor(fila / 3) * 3;
     let columnaInicio = Math.floor(columna / 3) * 3;
+
     for (let i = filaInicio; i < filaInicio + 3; i++) {
         for (let j = columnaInicio; j < columnaInicio + 3; j++) {
-        if (sudoku[i][j] === num) {
-            return false;
-        }
+            if (sudoku[i][j] === num) {
+                return false;
+            }
         }
     }
     return true; //el numero es valido
@@ -325,7 +327,7 @@ function esValidoGenerador(sudoku, fila, columna, num) {
  * Funcion para generar sudokus aleatorios internamente en el codigo
  * @returns sudoku (matriz 9x9 de numeros aleatorios, con espacios en null para completarlo)
  */
-function generarSudokus() {
+function generarSudoku() {
     let sudoku = [];
     for (let i = 0; i < 9; i++) {                   // Crear una matriz 9x9 para el Sudoku vacío
         sudoku.push(new Array(9).fill(null));
@@ -447,8 +449,8 @@ function revisar_submatriz(board, revisar_y, revisar_x) {
     for (let i = primeraY; i < primeraY + 3; i++) {
         for (let j = primeraX; j < primeraX + 3; j++) {
             if (i !== revisar_y || j !== revisar_x) { // Verificar si la posición actual no es la posición a revisar
-                if (board[i][j] === numRevisar) { // Verificar si el valor en la posición actual es igual al valor a revisar
-                    return false; // Si encuentra uno igual, retornar false
+                if (board[i][j] === numRevisar) {   // Verificar si el valor en la posición actual es igual al valor a revisar
+                    return false;                   // Si encuentra uno igual, retornar false
                 }
             }
         }
@@ -505,9 +507,9 @@ async function resolverSudokuBack(board,nombreSudoku){
                                 return board;
                             }
                         }
-                        board[y][x] = null;                            // si no es posible devuelvo el valor a null 
+                        board[y][x] = null;                                   // si no es posible devuelvo el valor a null 
                     }
-                    return false;                                      // si no se puede resolver
+                    return false;                                             // si no se puede resolver
                 }
         }
     }
@@ -551,13 +553,13 @@ Funciones de los botones para la interfaz
  * Funcion para generar los tableros aletoriamente y tambien se muestre en pantalla
  */
 function generarTableros(){
-
+    limpiarSudoku();
     //Se generan los sudokus
-    sudokuTopLeft = generarSudokus();
-    sudokuTopRight = generarSudokus();
-    sudokuCenter = generarSudokus();
-    sudokuBottLeft = generarSudokus();
-    sudokuBottRight = generarSudokus();
+    sudokuTopLeft = generarSudoku();
+    sudokuTopRight = generarSudoku();
+    sudokuCenter = generarSudoku();
+    sudokuBottLeft = generarSudoku();
+    sudokuBottRight = generarSudoku();
 
     //se agregan a la interfaz
     for (var x = 0; x < 5; x++) {                           
@@ -620,6 +622,7 @@ function limpiarSudoku(){
                 for (var columnas = 0; columnas < 9; columnas++) {     
                     nombre = "TL" + filas.toString() + columnas.toString();
                     let input = document.getElementById(nombre);      
+                    input.style.backgroundColor = "black";
                     input.value = null;
                     sudokuTopLeft[filas][columnas] = null;//limpia internamente
                 }
@@ -630,6 +633,7 @@ function limpiarSudoku(){
                 for (var columnas = 0; columnas < 9; columnas++) {     
                     nombre = "TR" + filas.toString() + columnas.toString();
                     let input = document.getElementById(nombre);      
+                    input.style.backgroundColor = "black";
                     input.value = null;
                     sudokuTopRight[filas][columnas] = null;//limpia internamente
                 }
@@ -640,6 +644,7 @@ function limpiarSudoku(){
                 for (var columnas = 0; columnas < 9; columnas++) {     
                     nombre = "C" + filas.toString() + columnas.toString();
                     let input = document.getElementById(nombre);      
+                    input.style.backgroundColor = "black";
                     input.value = null;
                     sudokuCenter[filas][columnas] = null;//limpia internamente
                 }
@@ -649,7 +654,8 @@ function limpiarSudoku(){
             for (var filas = 0; filas < 9; filas++) {                           
                 for (var columnas = 0; columnas < 9; columnas++) {     
                     nombre = "BL" + filas.toString() + columnas.toString();
-                    let input = document.getElementById(nombre);      
+                    let input = document.getElementById(nombre);     
+                    input.style.backgroundColor = "black"; 
                     input.value = null;
                     sudokuBottLeft[filas][columnas] = null;//limpia internamente
                 }
@@ -660,6 +666,7 @@ function limpiarSudoku(){
                 for (var columnas = 0; columnas < 9; columnas++) {     
                     nombre = "BR" + filas.toString() + columnas.toString();
                     let input = document.getElementById(nombre);      
+                    input.style.backgroundColor = "black";
                     input.value = null;
                     sudokuBottRight[filas][columnas] = null;//limpia internamente
                 }
@@ -686,6 +693,193 @@ async function  resolverBacktracking(){
     //await sleep(2000)
 }
 
+
+/**
+ * Las siguientes 3 funciones son para la ventana de error, la cual muestra en patanlla un mensaje y tambien activa y desactiva botones
+ */
+function cerrarVentanaError() {
+    document.getElementById("mensaje-error").style.display = "none";
+    activaBotones()
+}
+function activaBotones(){
+    document.getElementById('generar').disabled = false;
+    document.getElementById('resolvA').disabled = false;
+    document.getElementById('resolvBack').disabled = false;
+    document.getElementById('limpiar').disabled = false;
+    document.getElementById('verificaNum').disabled = false;
+}
+function desactivaBotones(){
+    document.getElementById('generar').disabled = true;
+    document.getElementById('resolvA').disabled = true;
+    document.getElementById('resolvBack').disabled = true;
+    document.getElementById('limpiar').disabled = true;
+    document.getElementById('verificaNum').disabled = true;
+}
+
+
+/**
+ *  Funcion para verificar si los numeros se repiten internamente en el codigo, si se repiten, se elimina y se muestra que habia un error
+ * @param {arra} matriz 
+ * @returns 
+ */
+function verificarNumeros(matriz, nombreCuadrados) {
+    var error = false;
+    // Verificar repetición en filas
+    for (var fila = 0; fila < 9; fila++) {
+        for (var columna = 0; columna < 9; columna++) {
+            var numeroActual = matriz[fila][columna];
+            if (numeroActual != null) { // Verificar si el valor actual no es nulo
+                for (var i = 0; i < 9; i++) {
+                    if (i != columna && matriz[fila][i] == numeroActual) { //ENCONTRO QUE EL NUMERO SE REPITE
+                        matriz[fila][i] = null;         //SE HACE QUE EL NUMERO NO SE ESCRIBA
+                        error = true
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+    // Verificar repetición en columnas
+    for (var columna = 0; columna < 9; columna++) {
+        for (var fila = 0; fila < 9; fila++) {
+            var numeroActual = matriz[fila][columna];
+            if (numeroActual != null) { // Verificar si el valor actual no es nulo
+                for (var i = 0; i < 9; i++) {
+                    if (i != fila && matriz[i][columna] == numeroActual) {
+                        matriz[i][columna] = null;         //SE HACE QUE EL NUMERO NO SE ESCRIBA
+                        error = true
+                        break
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * falta las submatriz
+     */
+
+    if(error){
+        document.getElementById("mensaje-error").style.display = "block";   //mensaje de error
+        desactivaBotones()
+        actualizarPantalla(matriz,nombreCuadrados)
+        return
+    }
+    
+    //document.getElementById("mensaje").style.display = "block";   //mensaje normal
+    return
+    //return, no existen numeros repetidos
+}
+
+
+/**
+ * Funcion que escribe los numeros del sudoku externo dentro del interior y luego verifica que no se repitan
+ * si es necesario, se puede llamar varias veces
+ */
+function compruebaSudoku(){
+
+    for (var x = 0; x < 5; x++) {                           
+        if(x === 0){                //SUDOKU TopLeft
+            for (var filas = 0; filas < 9; filas++) {                           
+                for (var columnas = 0; columnas < 9; columnas++) {     
+                    nombre = "TL" + filas.toString() + columnas.toString();
+                    
+                    let cuadrado = document.getElementById(nombre);             //obtengo el cuadro
+                    num = parseInt(cuadrado.value);                             //obtiene el valor del input 
+
+                    if(!isNaN(num)){                                            //para no dar error
+                        sudokuTopLeft[filas][columnas] = num;                    //se ingresa el numero
+                    }
+                    else{                                                       //en el caso de que el usuario borre los numeros
+                        sudokuTopLeft[filas][columnas] = null;
+                    }
+                }
+            }
+        }
+        if(x === 1){                //SUDOKU TopRight
+            for (var filas = 0; filas < 9; filas++) {                           
+                for (var columnas = 0; columnas < 9; columnas++) {     
+                    nombre = "TR" + filas.toString() + columnas.toString();
+                    
+                    let cuadrado = document.getElementById(nombre);             //obtengo el cuadro
+                    num = parseInt(cuadrado.value);                             //obtiene el valor del input 
+
+                    if(!isNaN(num)){                                            //para no dar error
+                        sudokuTopRight[filas][columnas] = num;                    //se ingresa el numero
+                    }
+                    else{                                                       //en el caso de que el usuario borre los numeros
+                        sudokuTopRight[filas][columnas] = null;
+                    }
+                }
+            }
+        }
+        if(x === 2){                //SUDOKU Center
+            for (var filas = 0; filas < 9; filas++) {                           
+                for (var columnas = 0; columnas < 9; columnas++) {     
+
+                    nombre = "C" + filas.toString() + columnas.toString();      //obtengo el nombre del cuadro
+
+                    let cuadrado = document.getElementById(nombre);             //obtengo el cuadro
+                    num = parseInt(cuadrado.value);                             //obtiene el valor del input 
+
+                    if(!isNaN(num)){                                            //para no dar error
+                        sudokuCenter[filas][columnas] = num;                    //se ingresa el numero
+                    }
+                    else{                                                       //en el caso de que el usuario borre los numeros
+                        sudokuCenter[filas][columnas] = null;
+                    }
+                }
+            }
+        }
+        if(x === 3){                //SUDOKU BottLEFT
+            for (var filas = 0; filas < 9; filas++) {                           
+                for (var columnas = 0; columnas < 9; columnas++) {     
+                    nombre = "BL" + filas.toString() + columnas.toString();
+
+                    let cuadrado = document.getElementById(nombre);             //obtengo el cuadro
+                    num = parseInt(cuadrado.value);                             //obtiene el valor del input 
+
+                    if(!isNaN(num)){                                            //para no dar error
+                        sudokuBottLeft[filas][columnas] = num;                    //se ingresa el numero
+                    }
+                    else{                                                       //en el caso de que el usuario borre los numeros
+                        sudokuBottLeft[filas][columnas] = null;
+                    }
+                }
+            }
+        }
+        if(x === 4){                //SUDOKU BottRight
+            for (var filas = 0; filas < 9; filas++) {                           
+                for (var columnas = 0; columnas < 9; columnas++) {     
+                    nombre = "BR" + filas.toString() + columnas.toString();
+
+                    let cuadrado = document.getElementById(nombre);             //obtengo el cuadro
+                    num = parseInt(cuadrado.value);                             //obtiene el valor del input 
+
+                    if(!isNaN(num)){                                            //para no dar error
+                        sudokuBottRight[filas][columnas] = num;                    //se ingresa el numero
+                    }
+                    else{                                                       //en el caso de que el usuario borre los numeros
+                        sudokuBottRight[filas][columnas] = null;
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    //se llama esta funcion para verificar los numeros escritos, si es necesario se usa varias veces
+    verificarNumeros(sudokuTopLeft,"TL");
+    verificarNumeros(sudokuTopRight,"TR");
+    verificarNumeros(sudokuCenter,"C");
+    verificarNumeros(sudokuBottLeft,"BL");
+    verificarNumeros(sudokuBottRight,"BR");
+}
+
 /*===========================================================================================================================================
 FINAL DE Funciones de los botones para la interfaz
 =============================================================================================================================================*/
+
+
+
