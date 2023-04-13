@@ -140,18 +140,23 @@ async function resolverSudokuBack(board,nombreSudoku){
 
                     let nums = [1,2,3,4,5,6,7,8,9];
                     shuffle(nums);                                          // tiro shuffle al array de nums  
-
-                    for(let i=0; i< nums.length;i++){                                                            // pruebo los numeros del array
-                        board[y][x] = nums[i];                              // seteo la casilla en el numero
+                    
+                    for(let i=0; i< nums.length;i++){
+                                                                                    // pruebo los numeros del array
+                        board[y][x] = nums[i];   
+                        actulizaCuadrado(cuadrado);                       //actualiza el cuadrado momentaneamente en rojo
+                        actualizarPantalla(board,nombreSudoku);
+                        await sleep(200)
+                                                                                   // seteo la casilla en el numero
                         if (esValido(board, y, x)) { 
-                            //para que se muestre en pantalla                         
-                            actulizaCuadrado(cuadrado);                       //actualiza el cuadrado momentaneamente en rojo
-                            actualizarPantalla(board,nombreSudoku);           //esto es para visualizar el cambio en el tablero externamente
+                          
+
                             await sleep(200);                                 //sin este se muestra todos los cambios de una vez
                             if (resolverSudokuBack(board,nombreSudoku)) {     // recursivo 
                                 return board;
                             }
                         }
+                      
                         board[y][x] = null;                                   // si no es posible devuelvo el valor a null 
                     }
                     return false;                                             // si no se puede resolver
