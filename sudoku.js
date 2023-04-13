@@ -5,9 +5,10 @@ openList = [
     //Se guardarán los "estados" (se guardarán soluciones diferentes(según la fila por la que vaya) de una fila,
     // hasta que llegue a una solución de esa fila, y así sucesivamente con las demás filas.
 ];
-copyArray = [];
 listPossibleValues = []; //For all the posible values of each node.
 auxListPossibleValues = [];
+possibValStates = [];
+auxPossibValStates = [];
 
 //Matriz del sudoku supremo, desmenusado en 5 matrices
 matSupIzq = [   //se llama array
@@ -70,11 +71,11 @@ matInfDer = [
     [0, 0, 0, 0, 1, 7, 0, 3, 0]
 ] //Matriz inferior derecha
 
-copyMatSupIzq = matSupIzq.structuredClone(matSupIzq);
-copyMatSupDer = matSupDer.structuredClone(matSupDer);
-copyMatCent = matCentral.structuredClone(matCentral);
-copyMatInfIzq = matInfIzq.structuredClone(matInfIzq);
-copyMatInfDer = matInfDer.structuredClone(matInfDer);
+copyMatSupIzq = structuredClone(matSupIzq);
+copyMatSupDer = structuredClone(matSupDer);
+copyMatCent = structuredClone(matCentral);
+copyMatInfIzq = structuredClone(matInfIzq);
+copyMatInfDer = structuredClone(matInfDer);
 
 /*****************************************************************************************************************************/
 /*                                                    Functions                                                              */
@@ -162,66 +163,112 @@ function validateGridValues(array, row, column, value){
  * @param {Number} column is the column where we going validate the apparitions.
  * @param {Boolean} sharedBox is true if we goint to search on the shared boxes of both arrays,
  * and false if we are searching on boxes that are just in one array.
+ * @param {String} forStates
 */
-/* function updateLPossVal(array, row, column){
-    for (let count = 1; count < 10; count++) {               //aumentará hasta 9 y se reiniciará, es para ver los valores que no se repiten en filas, columnas y cuadricula
-        timesDontAppear = 0;                                 //las veces que no aparece cada número en las validaciones.
-        if (validateRowValues(array, row, count) === false)  //si no aparece, le aumentamos 1 al contador.
-            timesDontAppear++;
-        if (validateColumnValues(array, column, count) === false)       //si no aparece, le aumentamos 1 al contador.
-            timesDontAppear++;
-        if (validateGridValues(array, row, column, count) === false)    //si no aparece, le aumentamos 1 al contador.
-            timesDontAppear++;
-        listPossibleValues.push([count, timesDontAppear])               //para el primer elemento seria: [1, (el número de las veces que no aparezca)]
-    }
-} */
-function updateLPossVal(array, row, column, sharedBox){
-    for (let count = 1; count < 10; count++) {               //Validar los valores que no se repiten en filas, columnas y cuadricula
+function updateLPossVal(array, row, column, sharedBox, forStates){
+    //Se validan los valores que no se repiten en filas, columnas y cuadricula
+    for (let count = 1; count < 10; count++) {
         if (sharedBox === false) {
-            if ((validateRowValues(array, row, count) === false) && (validateColumnValues(array, column, count) === false) &&
-                (validateGridValues(array, row, column, count) === false)) {
-                listPossibleValues.push(count);                  //Si no se repite en ninguno de los 3 lados, se agrega
+            if (forStates === "no") {
+                //Si no se actualizan los valores para hacer estados en casillas no compartidas, se agregan en la lista listPossibleValues
+                if ((validateRowValues(array, row, count) === false) && (validateColumnValues(array, column, count) === false) &&
+                    (validateGridValues(array, row, column, count) === false)) {
+                    listPossibleValues.push(count);                  //Si no se repite en ninguno de los 3 lados, se agrega
+                }
+            }else if(forStates === "yes"){
+                if ((validateRowValues(array, row, count) === false) && (validateColumnValues(array, column, count) === false) &&
+                    (validateGridValues(array, row, column, count) === false)) {
+                    possibValStates.push(count);                     //Si no se repite en ninguno de los 3 lados, se agrega
+                }
             }
         }
         if (sharedBox === true) {
-            if ((validateRowValues(array, row, count) === false) && (validateColumnValues(array, column, count) === false) &&
-                (validateGridValues(array, row, column, count) === false)) {
-                auxListPossibleValues.push(count);
+            if (forStates === "no") {
+                //Si no se actualizan los valores para hacer estados en casillas compartidas, se agregan en la lista auxListPossibleValues
+                if ((validateRowValues(array, row, count) === false) && (validateColumnValues(array, column, count) === false) &&
+                    (validateGridValues(array, row, column, count) === false)) {
+                    auxListPossibleValues.push(count);
+                }
+            }else if(forStates === "yes"){
+                //Si se actualizan los valores para hacer estados en casillas compartidas, se agregan en la lista auxPossibValStates
+                if ((validateRowValues(array, row, count) === false) && (validateColumnValues(array, column, count) === false) &&
+                    (validateGridValues(array, row, column, count) === false)) {
+                    auxPossibValStates.push(count);
+                }
             }
         }
     }
 }
 
 /**
- * Set the possible values for each box.
- * @param {Array} array is the array we will try to complete.
-*/
-/* function chooseValues(array, row, column){
-    for (let lista = 0; lista < 9; lista++) {
-        if (listPossibleValues[lista][1] === 3){                //el primer valor sería el número, y el segundo la cantidad de veces que no aparece en el sudoku
-            array[row][column] = listPossibleValues[lista][0];  //el primero que encuentre que no aparezca 3 veces lo asigna a la casilla
-            console.log("\nSe actualizó el numero", listPossibleValues[lista][0], "en la fila", row + 1, "y la columna", column + 1);
-            listPossibleValues = [];                            //limpia la lista abierta
-            return;
-        }else{
-            //console.log("Un valor que SI aparece es: ", listPossibleValues[lista][0]);//----------------------------quitar al terminar debug
-            
-            //para limpiar la lista y que pueda seguir solucionando con las demás filas.
-            if ((listPossibleValues[lista][0] === 9) && (listPossibleValues[lista][1] < 3)) {
-                listPossibleValues = [];
+ * This function counts the number of zeros that there are in a array.
+ * @param {Array} array is the array we going to count the zeros.
+ * @returns the number of zeros.
+ */
+function countZeros(array){
+    count = 0;
+    for (let i = 0; i < 9; i++) {          //9 por las filas
+        for (let j = 0; j < 9; j++) {      //9 por las columnas de una fila
+            if (array[i][j] === 0) {       //Revisa cuales son ceros
+                count++;
             }
         }
-    } 
-} */
-function chooseValues(array, row, column, sharedBox){               //se agrega el parametro sharedBox, si es true entonce
+    }
+    //console.log("La cantidad de ceros es: ", count);
+    return count;
+}
+
+/**
+ * 
+*/
+function updateOpenL(array){
+    zeros = 81;
+    sudokuWithLessZeros = [];
+    openList.forEach(sudoku => {
+        if (countZeros(sudoku) < zeros) {
+            zeros = countZeros(sudoku);
+            sudokuWithLessZeros = sudoku;
+        }
+    });
+}
+
+/**
+ * 
+ */
+function updateCloseL(){
+
+}
+
+/**
+ * Set the possible values for each box.
+ * @param {Array} array is the array we will try to complete.
+ * @param {Number} row
+ * @param {Number} column
+ * @param {Boolean} sharedBox
+ * @param {String} addToOpenList
+ * @param {Number} whichOneSudoku
+*/
+function chooseValues(array, row, column, sharedBox, addToOpenList, whichOneSudoku){
     if (sharedBox === false) {
-        //Escoge valor para una casilla que no es compartida
-        //Si no hay elementos entonces es porque no se agregaron, entonces no ay que limpiar nada
-        if (listPossibleValues.length > 0){
-            array[row][column] = listPossibleValues[0];  // se asigna el primer valor de la lista de posibles valores
-            console.log("\nSe actualizó el numero", listPossibleValues[0], "en la fila", row + 1, "y la columna", column + 1);
-            listPossibleValues = [];    //se limpia
-            return;
+        //Para hacer los distintos estados
+        if (addToOpenList === "yes") {
+            for (let index = 0; index < listPossibleValues.length; index++) {
+                //Escoge valor para una casilla que no es compartida
+                if (listPossibleValues.length > 0){
+                    array[row][column] = listPossibleValues[0];  //se asigna el primer valor de la lista de posibles valores
+                    console.log("\nSe actualizó el numero", listPossibleValues[0], "en la fila", row + 1, "y la columna", column + 1);
+                }
+                copyForStates = structuredClone(array);
+                nodeEvaluation(copyForStates, whichOneSudoku, "yes");
+                listPossibleValues.shift(); //Elimina el primer elemento porque ya se asignó
+                openList.push(copyForStates);
+            }
+            updateOpenL();
+        } else if (addToOpenList === "no") {
+            if (listPossibleValues.length > 0){
+                array[row][column] = possibValStates[0];  //se asigna el primer valor de la lista de posibles valores
+                console.log("\nSe actualizó el numero", possibValStates[0], "en la fila", row + 1, "y la columna", column + 1);
+            }
         }
     }
     if (sharedBox === true) {
@@ -232,26 +279,14 @@ function chooseValues(array, row, column, sharedBox){               //se agrega 
                     if (value1 === value2) {
                         array[row][column] = value1;  // se asigna el primer valor de la lista de posibles valores
                         console.log("\nSe actualizó el numero", listPossibleValues[0], "en la fila", row + 1, "y la columna", column + 1);
-                        listPossibleValues = [];    //se limpia
-                        auxListPossibleValues = []; //se limpia
-                        return;
                     }
                 });
             });
         }
     }
-}
-
-/**
- * 
- * 
-*/
-function updateOpenL(){
-
-}
-
-function updateCloseL(){
-
+    /* if () {
+        
+    } */
 }
 
 /**
@@ -358,29 +393,16 @@ function pruebaImprimirsudoku(){
         console.log("\n");
     }
 }
-
 /**
- * This function counts the number of zeros that there are in a array.
- * @param {Array} array is the array we going to count the zeros.
- * @returns the number of zeros.
+ * 
  */
-function countZeros(array){
-    count = 0;
-    for (let i = 0; i < 9; i++) {          //9 por las filas
-        for (let j = 0; j < 9; j++) {      //9 por las columnas de una fila
-            if (array[i][j] === 0) {       //Revisa cuales son ceros
-                count++;
-            }
-        }
-    }
-    //console.log("La cantidad de ceros es: ", count);
-    return count;
-}
-
 function checkNumberStates(){
     return openList.length
 }
 
+/**
+ * 
+ */
 function printOpenList(){
     amount = openList.length;
     message = "";
@@ -407,15 +429,19 @@ function printOpenList(){
 *   -3: matCentral.
 *   -4: matInfIzq.
 *   -5: matInfDer.
- * @returns "dont have solution" in case the sudoku has not been solved.
+@param {String} solveOneTime
 */
-function nodeEvaluation(array, whichOneSudoku){
+function nodeEvaluation(array, whichOneSudoku, solveOneTime){
     for (let i = 0; i < 9; i++) {                 //9 filas en una matriz
         console.log("\nVamos por la fila: ", i)
         for (let j = 0; j < 9; j++) {             //9 columnas por fila
 
             if (array[i][j] === 0) {
-                updateLPossVal(array, i, j, false);                        //Actualiza posibles valores para esa casilla
+                if (solveOneTime === "no") {
+                    updateLPossVal(array, i, j, false, "no");   //Actualiza posibles valores en la lista de posibles valores
+                } else if(solveOneTime === "yes"){
+                    updateLPossVal(array, i, j, false, "yes");  //Actualiza posibles valores en la lista de posibles valores para estados
+                }
 
                 //Evalua casillas compartidas de la matriz superior izquierda y escoge los valores
                 if ((whichOneSudoku == 1) && (i >= 6) && (j >= 6)) {
@@ -448,21 +474,26 @@ function nodeEvaluation(array, whichOneSudoku){
                     //falta agregar estado a la lista abierta y aplicar heuristica
                     chooseValues(copyMatCent, i + 6, j + 6, false);
                     //falta agregar estado a la lista abierta y aplicar heuristica
+                
+                } else {
+                    //Como no es una casilla compartida, se escoge el valor solo para esa casilla
+                    if (solveOneTime === "no") {
+                        chooseValues(array, i, j, false, "yes", whichOneSudoku);
+                    } else if(solveOneTime === "yes"){
+                        chooseValues(array, i, j, false, "no", whichOneSudoku);
+                    }
                 }
-
-                chooseValues(array, i, j, false);
-                //printSudoku(array, 1);
-            }
+                //Limpia las listas segun, si es para hacer estados o no
+                if (solveOneTime === "no") {
+                    listPossibleValues = [];
+                    auxListPossibleValues = [];
+                
+                }else if (solveOneTime === "yes") {
+                    possibValStates = [];
+                    auxPossibValStates = [];
+                }
+            }//end if
         }//end for columns
-
-
-        if (i === 8) {
-            if (countZeros(copyArray) > 0) {
-                openList.push(copyArray);     //se agrega el estado a la lista abierta
-                printOpenList();
-                return "dont have solution"
-            }
-        }
     }//end for rows
 }
 
@@ -477,17 +508,27 @@ function solveSudoku(){
             //le pasamos una copia para trabajar con la copia sacando posibles soluciones(estados)
             nodeEvaluation(copyMatSupIzq, 1);
             nodeEvaluation(copyMatSupDer, 2);
-            nodeEvaluation(copyMatCent, 3);
             nodeEvaluation(copyMatInfIzq, 4);
             nodeEvaluation(copyMatInfDer, 5);
+            nodeEvaluation(copyMatCent, 3);
         }
     }
 }
 
 //https://www.samurai-sudoku.com/es/
 
-//nodeEvaluation(matSupIzq, 1);
-//prueba();
+
+/* nodeEvaluation(copyMatSupIzq, 1, "no");
+
+console.log("La copia de la matriz original:\n")
+printSudoku(copyMatSupIzq, 1);
+console.log("La matriz original:\n")
+printSudoku(matSupIzq, 1);
+
+console.log("La copia de la matriz central original:\n")
+printSudoku(copyMatCent, 1);
+console.log("La matriz original central:\n")
+printSudoku(matCentral, 1); */
 
 //Quitar cambiones de debugueo en las siguiente funciones:
 //node Evaluation--console.log(....
