@@ -1,10 +1,13 @@
 /*****************************************************************************************************************************/
 /*                                                Global Structures                                                          */
 /*****************************************************************************************************************************/
+
 openList = [
     //Se guardarán los "estados" (se guardarán soluciones diferentes(según la fila por la que vaya) de una fila,
     // hasta que llegue a una solución de esa fila, y así sucesivamente con las demás filas.
 ];
+auxOpenList = [];
+closeList = [];
 listPossibleValues = []; //For all the posible values of each node.
 auxListPossibleValues = [];
 possibValStates = [];
@@ -224,20 +227,24 @@ function countZeros(array){
 function updateOpenL(array){
     zeros = 81;
     sudokuWithLessZeros = [];
-    openList.forEach(sudoku => {
+    auxOpenList.forEach(sudoku => {
         if (countZeros(sudoku) < zeros) {
             zeros = countZeros(sudoku);
             sudokuWithLessZeros = sudoku;
         }
     });
+    array = sudokuWithLessZeros;
+    openList.push(auxOpenList);
+    auxOpenList = [];   //se limpia para revisar todos los estados nuevos que entren
+    closeList.push(array);
 }
+/* 
 
-/**
- * 
+function updateCloseL(array){
+    closeLis
+    openList = [];//se limpian lal ista de estados diferentes
+}
  */
-function updateCloseL(){
-
-}
 
 /**
  * Set the possible values for each box.
@@ -256,47 +263,78 @@ function chooseValues(array, row, column, sharedBox, addToOpenList, whichOneSudo
                 //Escoge valor para una casilla que no es compartida
                 if (listPossibleValues.length > 0){
                     array[row][column] = listPossibleValues[0];  //se asigna el primer valor de la lista de posibles valores
-                    console.log("\nSe actualizó el numero", listPossibleValues[0], "en la fila", row + 1, "y la columna", column + 1);
+
+                    //console.log("\nSe actualizó el numero", listPossibleValues[0], "en la fila", row + 1, "y la columna", column + 1);
+
                 }
                 copyForStates = structuredClone(array);
                 nodeEvaluation(copyForStates, whichOneSudoku, "yes");
                 listPossibleValues.shift(); //Elimina el primer elemento porque ya se asignó
-                openList.push(copyForStates);
+                auxOpenList.push(copyForStates);
             }
-            updateOpenL();
+            updateOpenL(array);
         } else if (addToOpenList === "no") {
-            if (listPossibleValues.length > 0){
+            //if (listPossibleValues.length > 0){
+                if (possibValStates.length > 0){
                 array[row][column] = possibValStates[0];  //se asigna el primer valor de la lista de posibles valores
-                console.log("\nSe actualizó el numero", possibValStates[0], "en la fila", row + 1, "y la columna", column + 1);
+
+                //console.log("\nSe actualizó el numero", possibValStates[0], "en la fila", row + 1, "y la columna", column + 1);
+
             }
         }
-    }
+    }//end if
     if (sharedBox === true) {
-        //Escoge valor para una casilla que es compartida
-        if ((listPossibleValues.length > 0) && (auxListPossibleValues.length > 0)){
-            listPossibleValues.forEach(value1 => {
-                auxListPossibleValues.forEach(value2 => {
-                    if (value1 === value2) {
-                        array[row][column] = value1;  // se asigna el primer valor de la lista de posibles valores
-                        console.log("\nSe actualizó el numero", listPossibleValues[0], "en la fila", row + 1, "y la columna", column + 1);
-                    }
+
+        if (addToOpenList ==="yes") {
+
+            for (let index = 0; index < array.length; index++) {
+                //Escoge valor para una casilla que es compartida
+                if ((listPossibleValues.length > 0) && (auxListPossibleValues.length > 0)){
+                    listPossibleValues.forEach(value1 => {
+                        auxListPossibleValues.forEach(value2 => {
+                            if (value1 === value2) {
+                                array[row][column] = value1;  // se asigna el primer valor de la lista de posibles valores
+
+                                //console.log("\nSe actualizó el numero", listPossibleValues[0], "en la fila", row + 1, "y la columna", column + 1);
+
+                            }
+                        });
+                    });
+                }
+                copyForStates = structuredClone(array);
+                nodeEvaluation(copyForStates, whichOneSudoku, "yes");
+                listPossibleValues.shift(); //Elimina el primer elemento porque ya se asignó
+                auxOpenList.push(copyForStates);
+            }
+            updateOpenL(array);
+
+        } else if(addToOpenList ==="no"){
+
+            //Escoge valor para una casilla que es compartida
+            if ((possibValStates.length > 0) && (auxPossibValStates.length > 0)){
+                possibValStates.forEach(value1 => {
+                    auxPossibValStates.forEach(value2 => {
+                        if (value1 === value2) {
+                            array[row][column] = value1;  // se asigna el primer valor de la lista de posibles valores
+
+                            //console.log("\nSe actualizó el numero", possibValStates[0], "en la fila", row + 1, "y la columna", column + 1);
+
+                        }
+                    });
                 });
-            });
-        }
-    }
-    /* if () {
-        
-    } */
+            }
+        }//end if
+    }//end if
 }
 
 /**
  * This function prints in the console the sudoku we are solving.
  * @param {Array} array the array we are solving.
- * @param {Number} wichOneSudoku it recive the value number 1 if we want to print on the console the array passed by parameter;
+ * @param {Number} oneOrTwo it recive the value number 1 if we want to print on the console the array passed by parameter;
  * or the value number 2 if we want to print the solved sudoku.
 */
-function printSudoku(array, whichOneSudoku){
-    if (whichOneSudoku === 1) {
+function printSudoku(array, oneOrTwo){
+    if (oneOrTwo === 1) {
         console.log("\n",
             array[0][0], array[0][1], array[0][2], array[0][3], array[0][4], array[0][5], array[0][6], array[0][7], array[0][8], "\n",
             array[1][0], array[1][1], array[1][2], array[1][3], array[1][4], array[1][5], array[1][6], array[1][7], array[1][8], "\n",
@@ -309,7 +347,7 @@ function printSudoku(array, whichOneSudoku){
             array[8][0], array[8][1], array[8][2], array[8][3], array[8][4], array[8][5], array[8][6], array[8][7], array[8][8], "\n"
         );
     }
-    if (whichOneSudoku === 2) {
+    if (oneOrTwo === 2) {
         console.log("\n",
             matSupIzq[0][0], matSupIzq[0][1], matSupIzq[0][2], matSupIzq[0][3], matSupIzq[0][4], matSupIzq[0][5], matSupIzq[0][6], matSupIzq[0][7], matSupIzq[0][8],       " ",               " ",             " ",        matSupDer[0][0], matSupDer[0][1], matSupDer[0][2], matSupDer[0][3], matSupDer[0][4], matSupDer[0][5], matSupDer[0][6], matSupDer[0][7], matSupDer[0][8], "\n",
             matSupIzq[1][0], matSupIzq[1][1], matSupIzq[1][2], matSupIzq[1][3], matSupIzq[1][4], matSupIzq[1][5], matSupIzq[1][6], matSupIzq[1][7], matSupIzq[1][8],       " ",               " ",             " ",        matSupDer[1][0], matSupDer[1][1], matSupDer[1][2], matSupDer[1][3], matSupDer[1][4], matSupDer[1][5], matSupDer[1][6], matSupDer[1][7], matSupDer[1][8], "\n",
@@ -338,12 +376,14 @@ function printSudoku(array, whichOneSudoku){
 /**
  * Falta de concatenar los strings para imprimirlos todos en una linea, con todas las filas de las matrices
  */
-function pruebaImprimirsudoku(){
+function pruebaImprimirSudokuSamurai(){
     for (let i = 0; i < 9; i++) {
+        string = "";
         //Matriz supeior izquierda
         for (let j = 0; j < 9; j++) {
-            console.log(matSupIzq[i][j]);
+            string += matSupIzq[i][j];
         }
+        console.log(matSupIzq[i][j]);
         //Espacios entre matrices
         if (i < 6) {
             console.log("", "", "");
@@ -393,32 +433,6 @@ function pruebaImprimirsudoku(){
         console.log("\n");
     }
 }
-/**
- * 
- */
-function checkNumberStates(){
-    return openList.length
-}
-
-/**
- * 
- */
-function printOpenList(){
-    amount = openList.length;
-    message = "";
-    if (amount === 1) {
-        message = "\nEl cuál es:";
-    }
-    if (amount > 1) {
-        message = "\nLos cuáles son:";
-    }
-    console.log("\n\nAhora hay", amount, "estado/s en la lista abierta.");
-    console.log(message);
-    for (let index = 0; index < amount; index++) {
-        console.log("\n", "Estado", index + 1);
-        printSudoku(openList[index], 1)
-    }
-}
 
 /**
  * It calls the fuctions that evaluates all the posible values of all nodes, at the end add  the "state"(possible solution) of the sudoku to the open list..
@@ -432,6 +446,7 @@ function printOpenList(){
 @param {String} solveOneTime
 */
 function nodeEvaluation(array, whichOneSudoku, solveOneTime){
+//------------------------'-----------------------------FALTARIA SETEAR LOS VALORES PARA LAS ESQUINAS DE LA MATRIZ CENTRAL, UNA VEZ ESCOGIOD EL MEJOR ESTADO DE LAS MATRICES ESQUINERAS--------------------------------
     for (let i = 0; i < 9; i++) {                 //9 filas en una matriz
         console.log("\nVamos por la fila: ", i)
         for (let j = 0; j < 9; j++) {             //9 columnas por fila
@@ -445,35 +460,55 @@ function nodeEvaluation(array, whichOneSudoku, solveOneTime){
 
                 //Evalua casillas compartidas de la matriz superior izquierda y escoge los valores
                 if ((whichOneSudoku == 1) && (i >= 6) && (j >= 6)) {
-                    updateLPossVal(copyMatCent, i - 6, j - 6, true);
-                    chooseValues(array, i, j, true);
-                    //falta agregar estado a la lista abierta y aplicar heuristica
-                    chooseValues(copyMatCent, i - 6, j - 6, false);  //tambien se guarda en la matriz central
-                    //falta agregar estado a la lista abierta y aplicar heuristica
+                    if (solveOneTime === "no") {
+                        updateLPossVal(copyMatCent, i - 6, j - 6, true, "no");
+                        chooseValues(array, i, j, true, "yes", whichOneSudoku);
+                        //chooseValues(copyMatCent, i - 6, j - 6, false, );  //tambien se guarda en la matriz central
+                    }
+                    if (solveOneTime === "yes") {
+                        updateLPossVal(copyMatCent, i - 6, j - 6, true, "yes");
+                        chooseValues(array, i, j, true, "no", whichOneSudoku);
+                        //chooseValues(copyMatCent, i - 6, j - 6, false, );  //tambien se guarda en la matriz central
+                    }
 
                 //Evalua casillas compartidas de la matriz superior derecha y escoge los valores
                 } else if ((whichOneSudoku == 2) && (i >= 6) && (j <= 2)) {
-                    updateLPossVal(copyMatCent, i - 6, j + 6, true);
-                    chooseValues(array, i, j, true);
-                    //falta agregar estado a la lista abierta y aplicar heuristica
-                    chooseValues(copyMatCent, i - 6, j + 6, false);  //tambien se guarda en la matriz central
-                    //falta agregar estado a la lista abierta y aplicar heuristica
+                    if (solveOneTime === "no") {
+                        updateLPossVal(copyMatCent, i - 6, j + 6, true, "no");
+                        chooseValues(array, i, j, true, "yes", whichOneSudoku);
+                        //chooseValues(copyMatCent, i - 6, j + 6, false);
+                    }
+                    if (solveOneTime === "yes") {
+                        updateLPossVal(copyMatCent, i - 6, j + 6, true, "yes");
+                        chooseValues(array, i, j, true, "no", whichOneSudoku);
+                        //chooseValues(copyMatCent, i - 6, j + 6, false);  //tambien se guarda en la matriz central
+                    }
                 
                 //Evalua casillas compartidas de la matriz inferior izquierda y escoge los valores
                 } else if ((whichOneSudoku == 4) && (i <= 2) && (j >= 6) ) {
-                    updateLPossVal(copyMatCent, i + 6, j - 6, true);
-                    chooseValues(array, i, j, true);
-                    //falta agregar estado a la lista abierta y aplicar heuristica
-                    chooseValues(copyMatCent, i + 6, j - 6, false);
-                    //falta agregar estado a la lista abierta y aplicar heuristica
+                    if (solveOneTime === "no") {
+                        updateLPossVal(copyMatCent, i + 6, j - 6, true, "no");
+                        chooseValues(array, i, j, true, "yes", whichOneSudoku);
+                        //chooseValues(copyMatCent, i + 6, j - 6, false);
+                    }
+                    if (solveOneTime === "yes") {
+                        updateLPossVal(copyMatCent, i + 6, j - 6, true, "yes");
+                        chooseValues(array, i, j, true, "no", whichOneSudoku);
+                        //chooseValues(copyMatCent, i + 6, j - 6, false);
+                    }
 
                 //Evalua casillas compartidas de la matriz inferior derecha y escoge los valores
                 }else if ((whichOneSudoku == 5) && (i <= 2) && (j <= 2)) {
-                    updateLPossVal(copyMatCent, i + 6, j + 6, true);
-                    chooseValues(array, i, j, true);
-                    //falta agregar estado a la lista abierta y aplicar heuristica
-                    chooseValues(copyMatCent, i + 6, j + 6, false);
-                    //falta agregar estado a la lista abierta y aplicar heuristica
+                    if (solveOneTime === "no") {
+                        updateLPossVal(copyMatCent, i + 6, j + 6, true, "no");
+                        chooseValues(array, i, j, true, "yes", whichOneSudoku);
+                        //chooseValues(copyMatCent, i + 6, j + 6, false);
+                    }
+                    if (solveOneTime === "yes") {
+                        updateLPossVal(copyMatCent, i + 6, j + 6, true, "yes");
+                        chooseValues(array, i, j, true, "no", whichOneSudoku);
+                        //chooseValues(copyMatCent, i + 6, j + 6, false);
+                    }
                 
                 } else {
                     //Como no es una casilla compartida, se escoge el valor solo para esa casilla
@@ -497,6 +532,9 @@ function nodeEvaluation(array, whichOneSudoku, solveOneTime){
     }//end for rows
 }
 
+/**
+ * 
+ */
 function solveSudoku(){
     flag = true;
     while (flag) {
@@ -517,6 +555,18 @@ function solveSudoku(){
 
 //https://www.samurai-sudoku.com/es/
 
+//nodeEvaluation(copyMatSupIzq, 1, "no");
+//console.log("Matriz superior izquierda con", countZeros(copyMatSupIzq), "\n");
+//printSudoku(copyMatSupIzq, 1);
+nodeEvaluation(matSupIzq, 1, "no");
+console.log("Matriz superior izquierda con", countZeros(matSupIzq), "\n");
+printSudoku(matSupIzq, 1);
+
+/* nodeEvaluation(copyMatCent, 3, "no");
+console.log("Matriz central:\n");
+printSudoku(copyMatCent, 1) */
+
+
 
 /* nodeEvaluation(copyMatSupIzq, 1, "no");
 
@@ -535,3 +585,18 @@ printSudoku(matCentral, 1); */
 //updateOpenL--console.log("En teoria ya ...
 //updateOpenL--console.log("Un valor que
 //countZeros---console.log("La...
+
+/* 
+lista2 = [6,7,8,9];
+console.log(lista2);
+
+lista1 = [1,2,3,4,5, ...lista2];
+console.log(lista1);
+
+lista2 = [6,7,8,9,10,11,12];
+lista1 = [1,2,3,4,5, ...lista2];
+console.log(lista1);
+
+lista2 = [6,7,8,9,10,11];
+console.log(lista1);
+ */
