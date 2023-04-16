@@ -165,35 +165,35 @@ function shuffle(array) {
  * @param {string*} nombreDado nombre del sudoku (ej: C para el centro)
  * @returns array del sudoku, o false en caso de no resolverlo
  */
-async function resolverSudokuBack(board,nombreSudoku){
+function resolverSudokuBack(board,nombreSudoku){
 
     for (let y = 0; y < board.length; y++) {
         for (let x = 0; x < board[y].length; x++) {                         //ciclo x y
 
             cuadrado = nombreSudoku + y.toString() + x.toString();          //para obtner la casilla y luego cambiar el color, ej: C00, C01
 
-                if (board[y][x] === null) {                                 // si la casilla no tiene numero
-                    actulizaCuadrado(cuadrado);                             //actualiza el cuadrado momentaneamente en rojo
+            if (board[y][x] === null) {                                 // si la casilla no tiene numero
+                actulizaCuadrado(cuadrado);                             //actualiza el cuadrado momentaneamente en rojo
 
-                    let nums = [1,2,3,4,5,6,7,8,9];
-                    shuffle(nums);                                          // tiro shuffle al array de nums  
+                let nums = [1,2,3,4,5,6,7,8,9];
+                shuffle(nums);                                          // tiro shuffle al array de nums  
 
-                    for(let i=0; i< nums.length;i++){                       // pruebo los numeros del array
-                        board[y][x] = nums[i];                              // seteo la casilla en el numero
-                        actualizarPantalla(board,nombreSudoku);
-                        await sleep(200)  
+                for(let i=0; i< nums.length;i++){                       // pruebo los numeros del array
+                    board[y][x] = nums[i];                              // seteo la casilla en el numero
+                    actualizarPantalla(board,nombreSudoku);
+                    //await sleep(200)  
 
-                        if (esValido(board, y, x)) { 
-                            await sleep(200);                                 //sin este se muestra todos los cambios de una vez
-                            if (resolverSudokuBack(board,nombreSudoku)) {     // recursivo 
-                                return board;
-                            }
+                    if (esValido(board, y, x)) { 
+                        //await sleep(200);                                 //sin este se muestra todos los cambios de una vez
+                        if (resolverSudokuBack(board,nombreSudoku)) {     // recursivo 
+                            return board;
                         }
-                        board[y][x] = null;                                   // si no es posible devuelvo el valor a null 
-                        actualizarPantalla(board,nombreSudoku);
                     }
-                    return false;                                             // si no se puede resolver
+                    board[y][x] = null;                                   // si no es posible devuelvo el valor a null 
+                    actualizarPantalla(board,nombreSudoku);
                 }
+                return false;                                             // si no se puede resolver
+            }
         }
     }
     return board;                       // retorno la matriz
@@ -393,8 +393,6 @@ function chooseValues(array, row, column, sharedBox, addToOpenList, whichOneSudo
                 copyForStates = structuredClone(array);
                 nodeEvaluation(copyForStates, whichOneSudoku, "yes",nombreSudoku);
                 listPossibleValues.shift(); //Elimina el primer elemento porque ya se asignó
-                console.log("\nSe agregó el nuevo estado a la lista abierta:")
-                //printSudoku(copyForStates, 1);
                 auxOpenList.push(copyForStates);
             }
 
@@ -441,8 +439,6 @@ function chooseValues(array, row, column, sharedBox, addToOpenList, whichOneSudo
     }//end if
 }
 
-
-
 /**
  * It calls the fuctions that evaluates all the posible values of all nodes, at the end add  the "state"(possible solution) of the sudoku to the open list..
  * @param {Array} array is each array/sudoku separately of the five sudokus.
@@ -457,7 +453,8 @@ function chooseValues(array, row, column, sharedBox, addToOpenList, whichOneSudo
 function nodeEvaluation(array, whichOneSudoku, solveOneTime, nombreSudoku){
     for (let i = 0; i < 9; i++) {                 //9 filas en una matriz
         for (let j = 0; j < 9; j++) {             //9 columnas por fila
-            
+            //await sleep(1);
+            actualizarPantalla(array,nombreSudoku)
             //Busca los valores para casillas que tengan un cero inicialmente
             if (array[i][j] === null) {
                 if (solveOneTime === "no") {
@@ -471,10 +468,12 @@ function nodeEvaluation(array, whichOneSudoku, solveOneTime, nombreSudoku){
                     if (solveOneTime === "no") {
                         updateLPossVal(copyMatCent, i - 6, j - 6, true, "no");
                         chooseValues(array, i, j, true, "yes", whichOneSudoku,nombreSudoku);
+                        
                     }
                     if (solveOneTime === "yes") {
                         updateLPossVal(copyMatCent, i - 6, j - 6, true, "yes");
                         chooseValues(array, i, j, true, "yes", whichOneSudoku,nombreSudoku);
+
                     }
 
                 //Evalua casillas compartidas de la matriz superior derecha y escoge los valores
@@ -482,10 +481,12 @@ function nodeEvaluation(array, whichOneSudoku, solveOneTime, nombreSudoku){
                     if (solveOneTime === "no") {
                         updateLPossVal(copyMatCent, i - 6, j + 6, true, "no");
                         chooseValues(array, i, j, true, "yes", whichOneSudoku,nombreSudoku);
+
                     }
                     if (solveOneTime === "yes") {
                         updateLPossVal(copyMatCent, i - 6, j + 6, true, "yes");
                         chooseValues(array, i, j, true, "yes", whichOneSudoku,nombreSudoku);
+
                     }
                 
                 //Evalua casillas compartidas de la matriz inferior izquierda y escoge los valores
@@ -493,10 +494,12 @@ function nodeEvaluation(array, whichOneSudoku, solveOneTime, nombreSudoku){
                     if (solveOneTime === "no") {
                         updateLPossVal(copyMatCent, i + 6, j - 6, true, "no");
                         chooseValues(array, i, j, true, "yes", whichOneSudoku,nombreSudoku);
+
                     }
                     if (solveOneTime === "yes") {
                         updateLPossVal(copyMatCent, i + 6, j - 6, true, "yes");
                         chooseValues(array, i, j, true, "no", whichOneSudoku,nombreSudoku);
+
                     }
 
                 //Evalua casillas compartidas de la matriz inferior derecha y escoge los valores
@@ -504,18 +507,22 @@ function nodeEvaluation(array, whichOneSudoku, solveOneTime, nombreSudoku){
                     if (solveOneTime === "no") {
                         updateLPossVal(copyMatCent, i + 6, j + 6, true, "no");
                         chooseValues(array, i, j, true, "yes", whichOneSudoku,nombreSudoku);
+
                     }
                     if (solveOneTime === "yes") {
                         updateLPossVal(copyMatCent, i + 6, j + 6, true, "yes");
                         chooseValues(array, i, j, true, "no", whichOneSudoku,nombreSudoku);
+
                     }
                 
                 } else {
                     //Como no es una casilla compartida, se escoge el valor solo para esa casilla
                     if (solveOneTime === "no") {
                         chooseValues(array, i, j, false, "yes", whichOneSudoku,nombreSudoku);
+
                     } else if(solveOneTime === "yes"){
                         chooseValues(array, i, j, false, "no", whichOneSudoku,nombreSudoku);
+
                     }
                 }
                 //Limpia las listas segun, si es para hacer estados o no
@@ -618,6 +625,7 @@ function verificarSubmatrices(matriz) {
 /**
  *  Funcion para verificar si los numeros se repiten internamente en el codigo, si se repiten, se elimina y se muestra que habia un error
  * @param {array} matriz 
+ * @param {string} nombreCuadrados 
  * @returns 
  */
 async function verificarNumeros(matriz, nombreCuadrados) {
@@ -820,19 +828,45 @@ function limpiarSudoku(){
 }
 
 
-async function  resolverAStar(){
+function  resolverAStar(){
+    console.log("Entra a A**")
 
+    compruebaSudoku()
+    console.log("Sudoku del centro sin resolver:")
+    imprimirSudoku(sudokuCenter);
     nodeEvaluation(sudokuCenter, 3, "no","C");
+    console.log("Sudoku del centro resuelto:")
+    imprimirSudoku(sudokuCenter);
+
 
     actualizarEsquinas();
 
+    console.log("Sudoku Superior Izquierdo sin resolver:")
+    imprimirSudoku(sudokuTopLeft);
     nodeEvaluation(sudokuTopLeft, 1, "no","TL");
+    console.log("Sudoku Superior Izquierdo resuelto:")
+    imprimirSudoku(sudokuTopLeft);
 
+
+    console.log("Sudoku Superior Derecho sin resolver:")
+    imprimirSudoku(sudokuTopRight);
     nodeEvaluation(sudokuTopRight, 2, "no","TR");
+    console.log("Sudoku Superior Derecho resuelto:")
+    imprimirSudoku(sudokuTopRight);
 
+
+    console.log("Sudoku Inferior Izquierdo sin resolver:")
+    imprimirSudoku(sudokuBottLeft);
     nodeEvaluation(sudokuBottLeft, 4, "no","BL");
+    console.log("Sudoku Inferior Izquierdo resuelto:")
+    imprimirSudoku(sudokuBottLeft);
 
-    nodeEvaluation(sudokuBottRight, 5, "no","BR");
+
+    console.log("Sudoku Inferior Derecho sin resolver:")
+    imprimirSudoku(sudokuBottRight);
+    nodeEvaluation(sudokuBottRight, 5, "no","BL");
+    console.log("Sudoku Inferior Derecho resuelto:")
+    imprimirSudoku(sudokuBottRight);
 
     verificarNumeros(sudokuTopLeft,"TL");
     verificarNumeros(sudokuTopRight,"TR");
@@ -840,35 +874,51 @@ async function  resolverAStar(){
     verificarNumeros(sudokuBottLeft,"BL");
     verificarNumeros(sudokuBottRight,"BR");
 
-
-
-    imprimirSudoku(sudokuCenter);
-
-
 }
 
 
 /**
  * Funcion para resolver los sudokus por backtraking
  */
-async function  resolverBacktracking(){
+function  resolverBacktracking(){
+    console.log("Entra a BackTracking")
 
-    console.log("Sudoku central sin resolver:");
-    imprimirSudoku(sudokuCenter);
-
-    resolverSudokuBack(sudokuCenter,"C");
+    compruebaSudoku()
     
-    console.log("Sudoku central resuelto:");
+    console.log("\nSudoku del centro sin resolver:")
     imprimirSudoku(sudokuCenter);
-
-    await sleep(2000);
-
+    resolverSudokuBack(sudokuCenter,"C");
+    console.log("Sudoku del centro resuelto:")
+    imprimirSudoku(sudokuCenter);
 
     actualizarEsquinas();
+
+    console.log("\nSudoku Superior Izquierdo sin resolver:")
+    imprimirSudoku(sudokuTopLeft);
     resolverSudokuBack(sudokuTopLeft, "TL");
+    console.log("Sudoku Superior Izquierdo resuelto:")
+    imprimirSudoku(sudokuTopLeft);
+
+
+    console.log("\nSudoku Superior Derecho sin resolver:")
+    imprimirSudoku(sudokuTopRight);
     resolverSudokuBack(sudokuTopRight, "TR");
+    console.log("Sudoku Superior Derecho resuelto:")
+    imprimirSudoku(sudokuTopRight);
+
+
+    console.log("\nSudoku Inferior Izquierdo sin resolver:")
+    imprimirSudoku(sudokuBottLeft);
     resolverSudokuBack(sudokuBottLeft, "BL");
+    console.log("Sudoku Inferior Izquierdo resuelto:")
+    imprimirSudoku(sudokuBottLeft);
+
+
+    console.log("\nSudoku Inferior Derecho sin resolver:")
+    imprimirSudoku(sudokuBottRight);
     resolverSudokuBack(sudokuBottRight, "BR");
+    console.log("Sudoku Inferior Derecho resuelto:")
+    imprimirSudoku(sudokuBottRight);
 }
 
 
