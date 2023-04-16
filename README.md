@@ -9,3 +9,5 @@ Especificaiones para usar el sudoku:
 en el caso de estar bien, no va a mostrar nada en pantalla
 5. El boton de limpiar sudoku, limpia todo el sudoku hecho
 6. Los botones de Resolucion por A** y Resolucion por backtracking resuelven el sudoku hasta cierto punto, estos muestran el paso a paso del sudoku
+7. El boton de Resolucion por A** se puede llamar varias veces para lograr un mayor resultado, sin embargo, se deben de eliminar los numeros que esten incorrectos en el caso de que
+hayan
