@@ -137,27 +137,24 @@ async function resolverSudokuBack(board,nombreSudoku){
             cuadrado = nombreSudoku + y.toString() + x.toString();          //para obtner la casilla y luego cambiar el color, ej: C00, C01
 
                 if (board[y][x] === null) {                                 // si la casilla no tiene numero
+                    actulizaCuadrado(cuadrado);                             //actualiza el cuadrado momentaneamente en rojo
 
                     let nums = [1,2,3,4,5,6,7,8,9];
                     shuffle(nums);                                          // tiro shuffle al array de nums  
-                    
-                    for(let i=0; i< nums.length;i++){
-                                                                                    // pruebo los numeros del array
-                        board[y][x] = nums[i];   
-                        actulizaCuadrado(cuadrado);                       //actualiza el cuadrado momentaneamente en rojo
-                        actualizarPantalla(board,nombreSudoku);
-                        await sleep(200)
-                                                                                   // seteo la casilla en el numero
-                        if (esValido(board, y, x)) { 
-                          
 
+                    for(let i=0; i< nums.length;i++){                       // pruebo los numeros del array
+                        board[y][x] = nums[i];                              // seteo la casilla en el numero
+                        actualizarPantalla(board,nombreSudoku);
+                        await sleep(200)  
+
+                        if (esValido(board, y, x)) { 
                             await sleep(200);                                 //sin este se muestra todos los cambios de una vez
                             if (resolverSudokuBack(board,nombreSudoku)) {     // recursivo 
                                 return board;
                             }
                         }
-                      
                         board[y][x] = null;                                   // si no es posible devuelvo el valor a null 
+                        actualizarPantalla(board,nombreSudoku);
                     }
                     return false;                                             // si no se puede resolver
                 }
@@ -198,15 +195,14 @@ function desactivaBotones(){
 
 /**
  * Funcion para eliminar el numero dentro de la submatriz 3x3
- * @param {*} matriz 
- * @param {*} i 
- * @param {*} j 
- * @param {*} num 
+ * @param {array*} matriz 
+ * @param {number*} i 
+ * @param {number*} j 
+ * @param {number*} num 
  */
 function eliminarNumeroRepetido(matriz, i, j, num) {
     matriz[i][j] = null;
-    // Recorre la submatriz 3x3 y elimina el número repetido, pone null
-    for (let m = i; m < i + 3; m++) {
+    for (let m = i; m < i + 3; m++) { // Recorre la submatriz 3x3 y elimina el número repetido, pone null
         for (let n = j; n < j + 3; n++) {
             if (matriz[m][n] === num) {
                 matriz[m][n] = null;
@@ -216,7 +212,7 @@ function eliminarNumeroRepetido(matriz, i, j, num) {
 }
 /**
  * Funcion para verificar si un numero se repite dentro de una submatriz
- * @param {*} matriz 
+ * @param {array*} matriz 
  * @returns 
  */
 function verificarSubmatrices(matriz) {
@@ -244,16 +240,15 @@ function verificarSubmatrices(matriz) {
             }
         }
     }
-    // Si no se encontraron números repetidos en ninguna submatriz, retorna true
-    return true;
+    return true; // Si no se encontraron números repetidos en ninguna submatriz, retorna true
 }
 
 /**
  *  Funcion para verificar si los numeros se repiten internamente en el codigo, si se repiten, se elimina y se muestra que habia un error
- * @param {arra} matriz 
+ * @param {array} matriz 
  * @returns 
  */
-function verificarNumeros(matriz, nombreCuadrados) {
+async function verificarNumeros(matriz, nombreCuadrados) {
 
     var error = false;
     // Verificar repetición en filas
@@ -263,9 +258,17 @@ function verificarNumeros(matriz, nombreCuadrados) {
             if (numeroActual != null) { // Verificar si el valor actual no es nulo
                 for (var i = 0; i < 9; i++) {
                     if (i != columna && matriz[fila][i] == numeroActual) { //ENCONTRO QUE EL NUMERO SE REPITE
-                        matriz[fila][i] = null;         //SE HACE QUE EL NUMERO NO SE ESCRIBA
+                        matriz[fila][i] = null;                             //SE HACE QUE EL NUMERO NO SE ESCRIBA
                         error = true
+
+                        cuadrado = nombreCuadrados + fila.toString() + columna.toString();
+                        let input = document.getElementById(cuadrado);
+                        input.style.backgroundColor = "red";         
+
+                        await sleep(1000)
+                        input.style.backgroundColor = "black"; 
                         break
+
                     }
                 }
             }
@@ -278,9 +281,17 @@ function verificarNumeros(matriz, nombreCuadrados) {
             var numeroActual = matriz[fila][columna];
             if (numeroActual != null) { // Verificar si el valor actual no es nulo
                 for (var i = 0; i < 9; i++) {
-                    if (i != fila && matriz[i][columna] == numeroActual) {
+                    if (i != fila && matriz[i][columna] == numeroActual) {//ENCONTRO QUE EL NUMERO SE REPITE
                         matriz[i][columna] = null;         //SE HACE QUE EL NUMERO NO SE ESCRIBA
                         error = true
+
+                        cuadrado = nombreCuadrados + fila.toString() + columna.toString();
+                        let input = document.getElementById(cuadrado);
+                        input.style.backgroundColor = "red";         
+
+                        await sleep(1000)
+                        input.style.backgroundColor = "black"; 
+
                         break
                     }
                 }
@@ -296,10 +307,8 @@ function verificarNumeros(matriz, nombreCuadrados) {
         document.getElementById("mensaje-error").style.display = "block";   //mensaje de error
         desactivaBotones()
         actualizarPantalla(matriz,nombreCuadrados)
-        
         return
     }
-
     return //return, no existen numeros repetidos
 }
 // --------------------------------------------------------------------
@@ -321,6 +330,8 @@ function generarTableros(){
     sudokuCenter = generarSudoku();
     sudokuBottLeft = generarSudoku();
     sudokuBottRight = generarSudoku();
+
+    actualizarEsquinas();
 
     //se agregan a la interfaz
     for (var x = 0; x < 5; x++) {                           
@@ -373,7 +384,7 @@ function generarTableros(){
 }
 
 /**
- * Funcion para limpiar el sudoku
+ * Funcion para limpiar el sudoku internamente y exteriormente
  */
 function limpiarSudoku(){
     //limpia exteriormente
@@ -440,19 +451,21 @@ function limpiarSudoku(){
  * Funcion para resolver los sudokus por backtraking
  */
 async function  resolverBacktracking(){
-    console.log("entre a backtracking")
-
     resolverSudokuBack(sudokuCenter,"C")
-    await sleep(1000);
+    await sleep(2000);
     actualizarEsquinas()
-
     resolverSudokuBack(sudokuTopLeft, "TL")
     resolverSudokuBack(sudokuTopRight, "TR")
     resolverSudokuBack(sudokuBottLeft, "BL")
     resolverSudokuBack(sudokuBottRight, "BR")
-
-    //await sleep(2000)
 }
+
+async function  resolverAStar(){
+//
+
+//
+}
+
 
 /**
  * Funcion que escribe los numeros del sudoku externo dentro del interior y luego verifica que no se repitan

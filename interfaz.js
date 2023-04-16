@@ -263,11 +263,9 @@ function sleep(ms) {
 async function actulizaCuadrado(cuadrado){
     let input = document.getElementById(cuadrado);
     input.style.backgroundColor = "red";                             //esto es para visualizar el cambio en el tablero externamente
-    await sleep(200);
-    input.style.backgroundColor = "black";
+    await sleep(400)
+    input.style.backgroundColor = "black";  
 }
-
-
 
 
 /*============================================================================================================/
@@ -287,14 +285,14 @@ function esValidoGenerador(sudoku, fila, columna, num) {
         return false;
         }
     }
-    // Verifica si el número ya está en el cuadrado 3x3 actual
+    // para Verificar si el número ya está en el cuadrado 3x3 actual
     let filaInicio = Math.floor(fila / 3) * 3;
     let columnaInicio = Math.floor(columna / 3) * 3;
 
     for (let i = filaInicio; i < filaInicio + 3; i++) {
         for (let j = columnaInicio; j < columnaInicio + 3; j++) {
             if (sudoku[i][j] === num) {
-                return false;
+                return false;   //no es valido
             }
         }
     }

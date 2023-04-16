@@ -36,10 +36,9 @@ input[type=number] {
     border-color: white;
 }
 
-
-/******************************************
-    Clases para los div y sus caracteristicas generales
-******************************************/
+/****************************************************************
+    Clases para los div y botones y sus caracteristicas generales
+*****************************************************************/
 .Sudoku{        /*Div de los sudokus*/
     display: flex;
     justify-content: center;
@@ -64,13 +63,10 @@ input[type=number] {
     transition: background-color 0.3s ease-in-out;
 }
 
-
-
-
 /*Caracteristicas para que los botones se vean mejor*/
 .boton:hover {
-    background-color: #0069d9;
-    border-color: #0062cc;
+    background-color: #00d92f;
+    border-color: #00cc0a;
 }
 .boton:active {
     background-color: #0062cc;
